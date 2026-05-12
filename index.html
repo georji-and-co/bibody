@@ -3,1754 +3,1470 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ZERO FITNESS — Personal Training Studio</title>
+<title>BIBODYFIT — Personal Training Studio</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter+Tight:ital,wght@0,200;0,300;0,400;0,500;1,200;1,300&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@200;300;400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
 <style>
-/* ─── TOKENS ─────────────────────────── */
-:root {
-  --ink:    #0a0908;
-  --ink2:   #121110;
-  --ink3:   #1a1917;
-  --ink4:   #242220;
-  --fog:    rgba(255,255,255,.055);
-  --fog2:   rgba(255,255,255,.1);
-  --white:  #f2ede8;
-  --dim:    rgba(242,237,232,.45);
-  --dimmer: rgba(242,237,232,.25);
-  /* Accent (sapphire blue) */
-  --accent: #4a9fff;
-  --accent2:#2f7fe6;
-  --accent-rgb: 74,159,255;
-  --serif:  'Bebas Neue', sans-serif;
-  --mono:   'Inter Tight', sans-serif;
-  --jp:     'Noto Sans JP', sans-serif;
-  --ease:   cubic-bezier(.22,1,.36,1);
-  --ease2:  cubic-bezier(.16,1,.3,1);
-}
-/* ─── RESET ──────────────────────────── */
-*, *::before, *::after { box-sizing:border-box; margin:0; padding:0; }
-html { font-size:16px; scroll-behavior:smooth; overflow-x:hidden; }
+
+/* ── RESET & TOKENS ─────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; font-size: 16px; }
 body {
-  background:var(--ink);
-  color:var(--white);
-  font-family:var(--jp);
-  font-weight:300;
-  overflow-x:hidden;
-  -webkit-font-smoothing:antialiased;
-  cursor:none;
+  background: #070a12;
+  color: #dce6ff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
-a { text-decoration:none; color:inherit; }
-img { display:block; width:100%; }
-button { cursor:none; font-family:inherit; }
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; }
+img { display: block; max-width: 100%; }
 
-/* ─── CUSTOM CURSOR ──────────────────── */
-#cursor {
-  position:fixed; z-index:9999; pointer-events:none;
-  width:8px; height:8px; border-radius:50%;
-  background:var(--accent);
-  transform:translate(-50%,-50%);
-  transition:width .3s var(--ease), height .3s var(--ease), opacity .3s;
-  mix-blend-mode:normal;
-}
-#cursor-ring {
-  position:fixed; z-index:9998; pointer-events:none;
-  width:36px; height:36px; border-radius:50%;
-  border:1px solid rgba(var(--accent-rgb),.4);
-  transform:translate(-50%,-50%);
-  transition:width .5s var(--ease), height .5s var(--ease), transform .12s var(--ease2), opacity .3s;
-}
-body:hover #cursor { opacity:1; }
-
-/* ─── GRAIN OVERLAY ──────────────────── */
-#grain {
-  position:fixed; inset:0; z-index:9000; pointer-events:none;
-  opacity:.028;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-repeat:repeat;
-  background-size:160px 160px;
-  animation:grainShift 8s steps(10) infinite;
-}
-@keyframes grainShift {
-  0%,100%{transform:translate(0,0)}
-  10%{transform:translate(-2%,-3%)}
-  20%{transform:translate(3%,1%)}
-  30%{transform:translate(-1%,4%)}
-  40%{transform:translate(4%,-2%)}
-  50%{transform:translate(-3%,2%)}
-  60%{transform:translate(1%,-4%)}
-  70%{transform:translate(3%,3%)}
-  80%{transform:translate(-4%,1%)}
-  90%{transform:translate(2%,-1%)}
+:root {
+  /* palette */
+  --bg:        #070a12;
+  --bg1:       #0b0f1c;
+  --bg2:       #0f1526;
+  --bg3:       #141b2e;
+  --blue:      #4475f2;
+  --blue-dim:  rgba(68,117,242,.14);
+  --blue-line: rgba(68,117,242,.22);
+  --white:     #dce6ff;
+  --mid:       rgba(220,230,255,.5);
+  --low:       rgba(220,230,255,.28);
+  --lower:     rgba(220,230,255,.14);
+  --rule:      rgba(220,230,255,.08);
+  /* type */
+  --disp: 'DM Serif Display', Georgia, serif;
+  --sans: 'Outfit', sans-serif;
+  --jp:   'Noto Sans JP', sans-serif;
+  /* motion */
+  --ease: cubic-bezier(.25,1,.5,1);
 }
 
-/* ─── NAV ────────────────────────────── */
+/* ── GRAIN ───────────────────────────── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9000;
+  pointer-events: none;
+  opacity: .025;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── NAV ─────────────────────────────── */
 #nav {
-  position:fixed; top:0; left:0; right:0; z-index:500;
-  padding:0 40px;
-  height:64px;
-  display:flex; align-items:center; justify-content:space-between;
-  transition:background .6s var(--ease), border-color .6s;
-  border-bottom:1px solid transparent;
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 68px; padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background .5s var(--ease), border-color .5s;
+  border-bottom: 1px solid transparent;
 }
-#nav.scrolled {
-  background:rgba(10,9,8,.92);
-  border-color:var(--fog);
-  backdrop-filter:blur(20px) saturate(1.2);
+#nav.filled {
+  background: rgba(7,10,18,.88);
+  border-color: var(--rule);
+  backdrop-filter: blur(24px) saturate(1.4);
 }
-.nav-wordmark {
-  font-family:var(--serif);
-  font-size:18px;
-  letter-spacing:.12em;
-  color:var(--white);
+.logo {
+  font-family: var(--disp);
+  font-size: 20px; letter-spacing: .08em; font-style: italic;
+  color: var(--white);
 }
-.nav-wordmark span { color:var(--accent); }
-.nav-right { display:flex; align-items:center; gap:32px; }
-.nav-links { display:flex; gap:28px; }
-.nav-link {
-  font-family:var(--mono);
-  font-size:11px;
-  font-weight:300;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--dim);
-  transition:color .3s;
+.logo em { color: var(--blue); font-style: normal; }
+
+.nav-mid { display: flex; gap: 36px; }
+.nav-a {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 300;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--low); transition: color .25s;
 }
-.nav-link:hover { color:var(--white); }
+.nav-a:hover { color: var(--white); }
+
 .nav-cta {
-  font-family:var(--mono);
-  font-size:10px;
-  font-weight:400;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  color:var(--ink);
-  background:var(--accent);
-  border:none;
-  padding:10px 22px;
-  transition:background .3s, opacity .3s;
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--white);
+  background: var(--blue);
+  border: none; padding: 11px 24px;
+  transition: opacity .25s;
 }
-.nav-cta:hover { background:var(--accent2); }
+.nav-cta:hover { opacity: .85; }
 
-/* ─── HERO ───────────────────────────── */
+/* ── HERO ─────────────────────────────── */
 #hero {
-  position:relative;
-  height:100dvh; min-height:600px;
-  display:grid;
-  place-items:end start;
-  overflow:hidden;
+  position: relative;
+  height: 100dvh; min-height: 640px;
+  display: flex; align-items: flex-end;
+  overflow: hidden;
 }
 
-/* Cinematic background */
-.hero-bg {
-  position:absolute; inset:0;
+/* Full-bleed photo */
+.hero-photo {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  display: block;
+}
+/* Fallback gradient when no image */
+.hero-photo-fallback {
+  position: absolute; inset: 0;
   background:
-    linear-gradient(160deg, rgba(10,9,8,0) 0%, rgba(10,9,8,.85) 100%),
-    linear-gradient(to top, rgba(10,9,8,1) 0%, rgba(10,9,8,.4) 35%, rgba(10,9,8,.1) 100%);
-  z-index:1;
+    radial-gradient(ellipse 60% 80% at 65% 30%, rgba(68,117,242,.18) 0%, transparent 65%),
+    linear-gradient(160deg, #070a12 0%, #0d1428 50%, #070a12 100%);
 }
 
-/* Replaced by a deep photographic atmosphere using CSS */
-.hero-visual {
-  position:absolute; inset:0; z-index:0;
+/* Cinematic overlay — darker at bottom for text legibility */
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
   background:
-    radial-gradient(ellipse 80% 60% at 70% 40%, rgba(45,35,20,.8) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 60% at 20% 80%, rgba(20,15,8,.9) 0%, transparent 60%),
-    linear-gradient(135deg, #0a0908 0%, #1a1510 40%, #0f0c08 100%);
-  overflow:hidden;
+    linear-gradient(to top,
+      rgba(7,10,18,1)    0%,
+      rgba(7,10,18,.75)  30%,
+      rgba(7,10,18,.35)  60%,
+      rgba(7,10,18,.15)  100%),
+    linear-gradient(to right,
+      rgba(7,10,18,.6)   0%,
+      rgba(7,10,18,.1)   50%,
+      rgba(7,10,18,.0)   100%);
 }
 
-/* Photographic placeholder frame */
-.hero-photo-area {
-  position:absolute; inset:0;
-  display:flex; align-items:center; justify-content:flex-end;
-}
-.hero-photo-frame {
-  position:absolute;
-  right:0; top:0; bottom:0;
-  width:65%;
-  overflow:hidden;
-}
-.hero-photo-inner {
-  width:100%; height:100%;
-  background:
-    linear-gradient(to bottom, rgba(10,9,8,.3) 0%, transparent 30%, transparent 70%, rgba(10,9,8,.8) 100%),
-    linear-gradient(to left, transparent 60%, rgba(10,9,8,.9) 100%);
-  display:flex; align-items:center; justify-content:center;
-  flex-direction:column; gap:10px;
-}
-.photo-hint {
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-}
-.photo-hint-line {
-  width:1px; height:60px;
-  background:linear-gradient(to bottom, transparent, var(--accent), transparent);
-}
-.photo-hint-text {
-  font-family:var(--mono);
-  font-size:9px; letter-spacing:.2em; color:rgba(var(--accent-rgb),.35);
-  text-transform:uppercase; writing-mode:vertical-rl;
-}
-
-/* Atmosphere shapes */
-.atmo {
-  position:absolute; border-radius:50%; filter:blur(80px); pointer-events:none;
-}
-.atmo-1 {
-  width:500px; height:500px;
-  background:rgba(var(--accent-rgb),.06);
-  top:-10%; right:10%;
-  animation:atmoFloat 18s ease-in-out infinite;
-}
-.atmo-2 {
-  width:300px; height:300px;
-  background:rgba(var(--accent-rgb),.04);
-  bottom:10%; right:30%;
-  animation:atmoFloat 24s ease-in-out infinite reverse;
-}
-@keyframes atmoFloat {
-  0%,100%{transform:translate(0,0) scale(1)}
-  50%{transform:translate(20px,-30px) scale(1.05)}
-}
-
+/* Content */
 .hero-content {
-  position:relative; z-index:2;
-  padding:0 40px 64px;
-  max-width:700px;
+  position: relative; z-index: 2;
+  padding: 0 56px 88px;
+  max-width: 720px;
+}
+.hero-label {
+  font-family: var(--sans);
+  font-size: 10px; font-weight: 300;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--blue);
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp .7s .15s var(--ease) forwards;
+}
+.hero-label::before {
+  content: ''; width: 32px; height: 1px;
+  background: var(--blue); display: block;
 }
 
-.hero-eyebrow {
-  font-family:var(--mono);
-  font-size:10px; font-weight:300;
-  letter-spacing:.22em; text-transform:uppercase;
-  color:var(--accent);
-  margin-bottom:28px;
-  display:flex; align-items:center; gap:14px;
-  opacity:0; animation:heroReveal .8s .2s var(--ease) forwards;
+.hero-h {
+  font-family: var(--disp);
+  font-size: clamp(64px, 11vw, 120px);
+  line-height: 1.05; letter-spacing: .01em;
+  margin-bottom: 32px;
+  font-style: italic;
 }
-.hero-eyebrow::before {
-  content:'';
-  display:block; width:28px; height:1px;
-  background:var(--accent);
+.hero-h-row { display: block; overflow: visible; padding-top: 4px; }
+.hero-h-inner {
+  display: block;
+  opacity: 0; transform: translateY(32px);
+  animation: slideUp .85s var(--ease) forwards;
 }
-
-.hero-h1 {
-  font-family:var(--serif);
-  font-size:clamp(68px, 12vw, 120px);
-  /* Avoid Japanese glyphs getting clipped by tight line-height + overflow */
-  line-height:.96;
-  letter-spacing:.02em;
-  margin-bottom:36px;
-  overflow:hidden;
-  padding-top:.14em;
-  padding-bottom:.06em;
-  text-shadow:0 28px 70px rgba(var(--accent-rgb),.08);
-}
-.hero-h1-line {
-  display:block;
-  opacity:0;
-  transform:translateY(100%);
-  animation:lineReveal .9s var(--ease) forwards;
-  will-change:transform;
-}
-.hero-h1-line:nth-child(1) { animation-delay:.4s }
-.hero-h1-line:nth-child(2) { animation-delay:.55s }
-.hero-h1-line:nth-child(3) { animation-delay:.7s; color:var(--accent); }
+.hero-h-row:nth-child(1) .hero-h-inner { animation-delay: .3s; }
+.hero-h-row:nth-child(2) .hero-h-inner { animation-delay: .44s; color: var(--blue); }
+.hero-h-row:nth-child(3) .hero-h-inner { animation-delay: .58s; }
 
 .hero-sub {
-  font-family:var(--jp);
-  font-size:13px; font-weight:300;
-  line-height:2.2; color:var(--dim);
-  max-width:340px;
-  margin-bottom:48px;
-  opacity:0; animation:heroReveal .8s .9s var(--ease) forwards;
+  font-family: var(--jp);
+  font-size: 13px; line-height: 2.3;
+  color: var(--mid); max-width: 360px; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp .7s .75s var(--ease) forwards;
 }
 
 .hero-actions {
-  display:flex; flex-direction:column; gap:12px;
-  opacity:0; animation:heroReveal .8s 1.1s var(--ease) forwards;
+  display: flex; gap: 14px;
+  opacity: 0; animation: fadeUp .7s .9s var(--ease) forwards;
 }
-.btn-primary {
-  display:inline-flex; align-items:center; gap:12px;
-  font-family:var(--mono); font-size:11px; font-weight:400;
-  letter-spacing:.14em; text-transform:uppercase;
-  color:var(--ink);
-  background:var(--white);
-  border:none; padding:17px 32px;
-  transition:background .3s, gap .3s var(--ease);
-  width:fit-content;
+.btn-fill {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--white); background: var(--blue);
+  border: none; padding: 16px 28px;
+  transition: opacity .25s, gap .3s var(--ease);
 }
-.btn-primary:hover { background:var(--accent); gap:20px; }
-.btn-primary svg { width:16px; transition:transform .3s var(--ease); }
-.btn-primary:hover svg { transform:translateX(4px); }
-.btn-secondary {
-  display:inline-flex; align-items:center; gap:10px;
-  font-family:var(--mono); font-size:11px; font-weight:300;
-  letter-spacing:.14em; text-transform:uppercase;
-  color:var(--dimmer);
-  border:none; background:none; padding:0;
-  transition:color .3s, gap .3s var(--ease);
-  width:fit-content;
-}
-.btn-secondary:hover { color:var(--white); gap:16px; }
-.btn-secondary::before {
-  content:''; display:block; width:20px; height:1px;
-  background:currentColor;
-  transition:width .3s var(--ease);
-}
-.btn-secondary:hover::before { width:30px; }
+.btn-fill:hover { opacity: .85; gap: 16px; }
+.btn-fill svg { width: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform .3s var(--ease); }
+.btn-fill:hover svg { transform: translateX(3px); }
 
-/* Scroll indicator */
+.btn-line {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--sans); font-size: 11px; font-weight: 300;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--low); background: none;
+  border: 1px solid var(--rule); padding: 15px 24px;
+  transition: color .25s, border-color .25s;
+}
+.btn-line:hover { color: var(--white); border-color: var(--lower); }
+
+/* Scroll line */
 .hero-scroll {
-  position:absolute; bottom:36px; right:40px; z-index:2;
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-  opacity:0; animation:heroReveal .8s 1.4s var(--ease) forwards;
+  position: absolute; bottom: 32px; right: 48px; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeUp .6s 1.2s var(--ease) forwards;
 }
-.scroll-track {
-  width:1px; height:52px;
-  background:var(--fog2);
-  position:relative; overflow:hidden;
-}
-.scroll-fill {
-  position:absolute; top:-100%; left:0; right:0;
-  background:var(--accent);
-  height:100%;
-  animation:scrollDrop 2s ease-in-out infinite;
+.scroll-bar { width: 1px; height: 52px; background: var(--rule); overflow: hidden; position: relative; }
+.scroll-bar::after {
+  content: ''; position: absolute; top: -100%;
+  left: 0; right: 0; height: 100%;
+  background: var(--blue);
+  animation: scrollDrop 2s ease-in-out infinite;
 }
 @keyframes scrollDrop { 0%{top:-100%} 100%{top:100%} }
-.scroll-label {
-  font-family:var(--mono); font-size:8px; font-weight:300;
-  letter-spacing:.22em; text-transform:uppercase; color:var(--dimmer);
-  writing-mode:vertical-rl;
+.scroll-text {
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--lower);
+  writing-mode: vertical-rl;
 }
 
-/* ─── MARQUEE ────────────────────────── */
-.marquee-wrap {
-  overflow:hidden;
-  border-top:1px solid var(--fog);
-  border-bottom:1px solid var(--fog);
-  background:var(--ink2);
+/* ── TICKER ──────────────────────────── */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg1);
+  padding: 0;
 }
-.marquee-track {
-  display:flex; gap:0;
-  animation:marqueeScroll 22s linear infinite;
-  white-space:nowrap;
+.ticker-track {
+  display: flex;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
 }
-.marquee-item {
-  padding:18px 40px;
-  font-family:var(--mono); font-size:11px; font-weight:300;
-  letter-spacing:.18em; text-transform:uppercase;
-  color:var(--dimmer);
-  border-right:1px solid var(--fog);
-  flex-shrink:0;
-  transition:color .3s;
+.ticker-item {
+  flex-shrink: 0;
+  padding: 17px 44px;
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--low);
+  border-right: 1px solid var(--rule);
 }
-.marquee-item.accent { color:var(--accent); }
-@keyframes marqueeScroll {
-  0%{transform:translateX(0)} 100%{transform:translateX(-50%)}
+.ticker-item.accent { color: var(--blue); }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── NUMBERS ─────────────────────────── */
+#numbers {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  border-bottom: 1px solid var(--rule);
+}
+.num-cell {
+  padding: 52px 40px;
+  border-right: 1px solid var(--rule);
+  position: relative;
+  transition: background .4s;
+}
+.num-cell:hover { background: var(--blue-dim); }
+.num-cell:last-child { border-right: none; }
+.num-cell::after {
+  content: '';
+  position: absolute; bottom: 0; left: 40px; right: 40px; height: 1px;
+  background: var(--blue);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .5s var(--ease);
+}
+.num-cell:hover::after { transform: scaleX(1); }
+.num-n {
+  font-family: var(--disp);
+  font-size: clamp(52px,5.5vw,72px); line-height: 1;
+  color: var(--white); margin-bottom: 10px; font-style: italic;
+}
+.num-en {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--blue);
+  margin-bottom: 4px;
+}
+.num-jp { font-size: 12px; color: var(--low); }
+
+/* ── SECTIONS BASE ───────────────────── */
+.sec { padding: 120px 48px; }
+.eyebrow {
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--blue); }
+.sec-title {
+  font-family: var(--disp);
+  font-size: clamp(44px, 5.5vw, 68px);
+  line-height: 1.05; letter-spacing: .01em; color: var(--white);
+  font-style: italic;
+}
+.sec-title i { color: var(--blue); font-style: normal; }
+
+/* ── CONCEPT ─────────────────────────── */
+#concept {
+  display: grid; grid-template-columns: 5fr 4fr; gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.concept-left {
+  padding: 96px 48px; border-right: 1px solid var(--rule);
+}
+.concept-lead {
+  font-size: 14px; line-height: 2.6; color: var(--mid);
+  max-width: 460px; margin: 32px 0 56px;
+}
+.concept-lead p + p { margin-top: 20px; }
+.pillars { border-top: 1px solid var(--rule); }
+.pillar {
+  display: flex; gap: 24px; align-items: flex-start;
+  padding: 28px 0; border-bottom: 1px solid var(--rule);
+  transition: background .3s;
+}
+.pillar-n {
+  font-family: var(--disp); font-size: 40px; font-style: italic;
+  color: var(--blue-dim); line-height: 1; width: 52px; flex-shrink: 0;
+  transition: color .35s;
+}
+.pillar:hover .pillar-n { color: rgba(68,117,242,.45); }
+.pillar-body h4 {
+  font-family: var(--sans); font-size: 11px; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--white); margin-bottom: 7px;
+}
+.pillar-body p { font-size: 12px; color: var(--mid); line-height: 2; }
+
+.concept-right {
+  padding: 96px 48px; background: var(--bg1);
+  display: flex; flex-direction: column; gap: 32px;
+}
+/* Photo placeholder */
+.concept-photo {
+  flex: 1; background: var(--bg2);
+  border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; min-height: 280px;
+}
+.concept-photo-label {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: .2;
+}
+.concept-photo-label svg { stroke: var(--blue); fill: none; stroke-width: .8; }
+.concept-photo-label span {
+  font-family: var(--sans); font-size: 8px;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--blue);
+  text-align: center;
+}
+/* Data */
+.concept-data { display: flex; flex-direction: column; }
+.data-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 14px 0; border-bottom: 1px solid var(--rule);
+}
+.data-row:last-child { border-bottom: none; }
+.data-k { font-size: 12px; color: var(--low); }
+.data-v {
+  font-family: var(--disp); font-size: 28px;
+  color: var(--blue); letter-spacing: .02em;
 }
 
-/* ─── METRICS ────────────────────────── */
-#metrics {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  border-bottom:1px solid var(--fog);
-}
-.metric-cell {
-  padding:52px 40px;
-  border-right:1px solid var(--fog);
-  position:relative; overflow:hidden;
-}
-.metric-cell:last-child { border-right:none; }
-.metric-cell::after {
-  content:'';
-  position:absolute; bottom:0; left:40px; right:40px;
-  height:1px; background:var(--accent);
-  transform:scaleX(0); transform-origin:left;
-  transition:transform .6s var(--ease);
-}
-.metric-cell:hover::after { transform:scaleX(1); }
-.metric-num {
-  font-family:var(--serif);
-  font-size:clamp(52px,6vw,72px);
-  line-height:1;
-  color:var(--white);
-  margin-bottom:10px;
-}
-.metric-num sup { font-size:.4em; vertical-align:super; color:var(--accent); }
-.metric-label {
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--dim);
-  margin-bottom:6px;
-}
-.metric-sub {
-  font-family:var(--jp); font-size:12px; font-weight:300; color:var(--dimmer);
-  line-height:1.8;
-}
-
-/* ─── PHILOSOPHY ─────────────────────── */
-#philosophy {
-  padding:120px 40px;
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:80px; align-items:center;
-}
-.phil-label {
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.2em; text-transform:uppercase; color:var(--accent);
-  margin-bottom:28px;
-  display:flex; align-items:center; gap:14px;
-}
-.phil-label::before { content:''; width:28px; height:1px; background:var(--accent); display:block; }
-.phil-h2 {
-  font-family:var(--serif);
-  font-size:clamp(44px,5vw,64px);
-  line-height:.95; letter-spacing:.02em;
-  margin-bottom:36px;
-}
-.phil-body {
-  font-family:var(--jp); font-size:14px; font-weight:300;
-  line-height:2.4; color:var(--dim);
-  max-width:420px;
-}
-.phil-body p + p { margin-top:20px; }
-
-/* Visual panel */
-.phil-visual {
-  position:relative; aspect-ratio:4/5;
-  background:var(--ink3);
-  overflow:hidden;
-}
-.phil-visual-inner {
-  position:absolute; inset:0;
-  background:
-    linear-gradient(135deg, rgba(var(--accent-rgb),.04) 0%, transparent 60%),
-    radial-gradient(ellipse 70% 70% at 60% 40%, rgba(var(--accent-rgb),.06) 0%, transparent 70%),
-    var(--ink3);
-  display:flex; align-items:center; justify-content:center;
-}
-.visual-placeholder {
-  display:flex; flex-direction:column; align-items:center; gap:16px;
-}
-.vp-icon { width:48px; height:48px; }
-.vp-text {
-  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
-  color:rgba(var(--accent-rgb),.3); text-transform:uppercase; text-align:center;
-}
-.phil-visual-accent {
-  position:absolute; bottom:0; left:0; right:0;
-  height:2px; background:var(--accent);
-  transform:scaleX(0); transform-origin:left;
-  transition:transform .8s var(--ease);
-}
-.phil-visual:hover .phil-visual-accent { transform:scaleX(1); }
-.phil-caption {
-  position:absolute; bottom:24px; right:24px;
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.16em; color:var(--dimmer); text-transform:uppercase;
-}
-
-/* ─── PROGRAMS ───────────────────────── */
-#programs { padding:0 0 120px; }
-.section-header {
-  padding:80px 40px 48px;
-  display:flex; justify-content:space-between; align-items:flex-end;
-}
-.section-label {
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.2em; text-transform:uppercase; color:var(--accent);
-  margin-bottom:16px;
-  display:flex; align-items:center; gap:12px;
-}
-.section-label::before { content:''; width:24px; height:1px; background:var(--accent); display:block; }
-.section-title {
-  font-family:var(--serif);
-  font-size:clamp(40px,4.5vw,58px);
-  line-height:.95;
-}
-.section-link {
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--dim);
-  display:flex; align-items:center; gap:10px;
-  transition:color .3s, gap .3s var(--ease);
-  padding-bottom:4px;
-  border-bottom:1px solid var(--fog2);
-}
-.section-link:hover { color:var(--white); gap:16px; }
-
-/* Program rows */
-.program-table {
-  border-top:1px solid var(--fog);
-}
-.prog-row {
-  display:grid;
-  grid-template-columns:64px 1fr auto;
-  align-items:center;
-  gap:40px;
-  padding:40px;
-  border-bottom:1px solid var(--fog);
-  transition:background .4s var(--ease);
-  position:relative; overflow:hidden;
-  cursor:none;
-}
-.prog-row::before {
-  content:'';
-  position:absolute; left:0; top:0; bottom:0;
-  width:0;
-  background:var(--fog);
-  transition:width .5s var(--ease);
-}
-.prog-row:hover::before { width:100%; }
-.prog-row:hover { background:var(--ink2); }
-.prog-index {
-  font-family:var(--serif);
-  font-size:40px; line-height:1;
-  color:rgba(var(--accent-rgb),.2);
-  position:relative; z-index:1;
-  transition:color .3s;
-}
-.prog-row:hover .prog-index { color:rgba(var(--accent-rgb),.5); }
-.prog-main { position:relative; z-index:1; }
-.prog-name {
-  font-family:var(--mono); font-size:18px; font-weight:400;
-  letter-spacing:.06em; text-transform:uppercase;
-  color:var(--white);
-  margin-bottom:8px;
-}
-.prog-desc {
-  font-family:var(--jp); font-size:13px; font-weight:300;
-  color:var(--dim); line-height:1.8;
-}
-.prog-tags {
-  display:flex; gap:8px; margin-top:10px;
-  flex-wrap:wrap;
-}
-.prog-tag {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.12em; text-transform:uppercase;
-  color:var(--dimmer);
-  border:1px solid var(--fog2);
-  padding:4px 10px;
-}
-.prog-arrow {
-  position:relative; z-index:1;
-  width:44px; height:44px;
-  border:1px solid var(--fog2);
-  border-radius:50%;
-  display:flex; align-items:center; justify-content:center;
-  transition:border-color .3s, background .3s;
-  flex-shrink:0;
-}
-.prog-row:hover .prog-arrow {
-  border-color:var(--accent);
-  background:var(--accent);
-}
-.prog-arrow svg {
-  width:16px; stroke:var(--dim);
-  transition:stroke .3s, transform .3s var(--ease);
-}
-.prog-row:hover .prog-arrow svg { stroke:var(--ink); transform:translateX(2px); }
-
-/* ─── TRAINER ────────────────────────── */
+/* ── TRAINER ─────────────────────────── */
 #trainer {
-  padding:120px 0;
-  border-top:1px solid var(--fog);
+  border-top: 1px solid var(--rule);
+  display: grid; grid-template-columns: 1fr 1fr;
 }
-.trainer-header { padding:0 40px 64px; }
-.trainer-layout {
-  display:grid; grid-template-columns:1fr 1fr;
+.trainer-photo {
+  background: var(--bg2); position: relative;
+  overflow: hidden; min-height: 560px;
+  display: flex; align-items: center; justify-content: center;
 }
-.trainer-portrait {
-  position:relative;
-  aspect-ratio:3/4;
-  background:var(--ink3);
-  overflow:hidden;
+.trainer-photo::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(to right, var(--blue), rgba(68,117,242,0));
 }
-.trainer-portrait-bg {
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 60% 80% at 50% 30%, rgba(var(--accent-rgb),.07) 0%, transparent 70%),
-    var(--ink3);
-  display:flex; align-items:center; justify-content:center;
+.trainer-photo-hint {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px; opacity: .2;
 }
-.portrait-placeholder {
-  display:flex; flex-direction:column; align-items:center; gap:16px;
-  opacity:.5;
+.trainer-photo-hint svg { stroke: var(--blue); fill: none; stroke-width: .8; }
+.trainer-photo-hint span {
+  font-family: var(--sans); font-size: 9px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
 }
-.portrait-placeholder svg { stroke:var(--accent); fill:none; stroke-width:1; }
-.portrait-placeholder span {
-  font-family:var(--mono); font-size:9px; letter-spacing:.2em;
-  color:var(--accent); text-transform:uppercase;
+.trainer-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 52px 40px 36px;
+  background: linear-gradient(transparent, rgba(7,10,18,.96));
 }
-.portrait-overlay {
-  position:absolute; bottom:0; left:0; right:0;
-  background:linear-gradient(transparent, rgba(10,9,8,.9));
-  padding:48px 36px 36px;
+.trainer-name {
+  font-family: var(--disp); font-size: 52px; line-height: 1; font-style: italic;
+  margin-bottom: 6px;
 }
-.portrait-name {
-  font-family:var(--serif); font-size:44px; line-height:1;
-  letter-spacing:.02em; margin-bottom:8px;
-}
-.portrait-title {
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--accent);
+.trainer-role {
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--blue);
 }
 
-.trainer-story {
-  padding:64px;
-  display:flex; flex-direction:column; justify-content:center;
-  background:var(--ink2);
+.trainer-body {
+  padding: 80px 56px;
+  background: var(--bg1);
+  display: flex; flex-direction: column; justify-content: center;
 }
 .trainer-quote {
-  font-family:'Inter Tight', sans-serif;
-  font-size:clamp(20px,2.5vw,28px);
-  font-weight:200; font-style:italic;
-  line-height:1.5; color:var(--white);
-  border-left:2px solid var(--accent);
-  padding-left:28px;
-  margin-bottom:40px;
+  font-family: var(--disp); font-size: clamp(16px,2vw,22px);
+  font-weight: 400; font-style: italic; line-height: 1.7;
+  color: var(--white);
+  border-left: 2px solid var(--blue); padding-left: 24px;
+  margin-bottom: 40px;
 }
-.trainer-body {
-  font-family:var(--jp); font-size:13px; font-weight:300;
-  line-height:2.4; color:var(--dim);
-  margin-bottom:40px;
+.trainer-text {
+  font-size: 13px; line-height: 2.5; color: var(--mid);
+  margin-bottom: 40px;
 }
-.trainer-body p + p { margin-top:16px; }
+.trainer-text p + p { margin-top: 16px; }
 .trainer-creds {
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:1px; background:var(--fog);
-  border:1px solid var(--fog);
-  margin-top:auto;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule);
 }
-.cred-cell {
-  background:var(--ink3); padding:20px 22px;
+.cred {
+  background: var(--bg2); padding: 18px 20px;
 }
-.cred-label {
-  font-family:var(--mono); font-size:8px; font-weight:300;
-  letter-spacing:.18em; text-transform:uppercase; color:var(--accent);
-  margin-bottom:6px;
+.cred-l {
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 5px;
 }
-.cred-val {
-  font-family:var(--mono); font-size:13px; font-weight:400; color:var(--white);
-}
-
-/* ─── TRANSFORMATIONS ────────────────── */
-#transformations { padding:120px 40px; border-top:1px solid var(--fog); }
-.trans-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:1px; background:var(--fog);
-  border:1px solid var(--fog);
-  margin-top:48px;
-}
-.trans-card {
-  background:var(--ink2);
-  padding:36px 28px;
-  position:relative; overflow:hidden;
-  transition:background .4s;
-}
-.trans-card:hover { background:var(--ink3); }
-.trans-card::before {
-  content:'';
-  position:absolute; top:0; left:0; right:0;
-  height:2px; background:var(--accent);
-  transform:scaleX(0); transform-origin:left;
-  transition:transform .5s var(--ease);
-}
-.trans-card:hover::before { transform:scaleX(1); }
-.trans-avatar {
-  width:56px; height:56px; border-radius:50%;
-  background:var(--ink3); border:1px solid var(--fog2);
-  display:flex; align-items:center; justify-content:center;
-  margin-bottom:20px;
-}
-.trans-avatar svg { stroke:var(--dimmer); fill:none; stroke-width:1; }
-.trans-name {
-  font-family:var(--mono); font-size:12px; font-weight:400;
-  letter-spacing:.08em; margin-bottom:4px;
-}
-.trans-period {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.12em; color:var(--accent);
-  text-transform:uppercase; margin-bottom:20px;
-}
-.trans-data {
-  display:flex; flex-direction:column; gap:8px; margin-bottom:20px;
-}
-.trans-datum {
-  display:flex; justify-content:space-between; align-items:center;
-  padding:8px 0;
-  border-bottom:1px solid var(--fog);
-}
-.trans-datum:last-child { border-bottom:none; }
-.datum-key {
-  font-family:var(--jp); font-size:12px; font-weight:300; color:var(--dim);
-}
-.datum-val {
-  font-family:var(--mono); font-size:13px; font-weight:400; color:var(--white);
-}
-.trans-quote {
-  font-family:var(--jp); font-size:12px; font-weight:300;
-  line-height:2; color:var(--dimmer); font-style:italic;
+.cred-v {
+  font-family: var(--sans); font-size: 13px; font-weight: 400;
+  color: var(--white);
 }
 
-/* ─── BOOKING ────────────────────────── */
+/* ── RESULTS ─────────────────────────── */
+#results { border-top: 1px solid var(--rule); }
+.results-header { padding: 80px 48px 0; }
+.results-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 0;
+}
+.result-card {
+  background: var(--bg1); padding: 40px 32px;
+  position: relative; overflow: hidden; transition: background .35s;
+}
+.result-card:hover { background: var(--bg2); }
+.result-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--blue), transparent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .5s var(--ease);
+}
+.result-card:hover::before { transform: scaleX(1); }
+
+.rc-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.rc-avatar svg { stroke: var(--low); fill: none; stroke-width: 1; }
+.rc-name { font-family: var(--sans); font-size: 12px; font-weight: 400; color: var(--white); margin-bottom: 2px; }
+.rc-meta { font-family: var(--sans); font-size: 9px; font-weight: 300; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; }
+.rc-data { border: 1px solid var(--rule); margin-bottom: 18px; }
+.rc-datum { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+.rc-datum:last-child { border-bottom: none; }
+.rd-k { font-size: 11px; color: var(--low); }
+.rd-v { font-family: var(--disp); font-size: 20px; letter-spacing: .02em; color: var(--blue); }
+.rc-quote { font-size: 12px; line-height: 2.1; color: var(--low); font-style: italic; }
+
+/* ── PROGRAMS ────────────────────────── */
+#programs {
+  border-top: 1px solid var(--rule);
+}
+.programs-header { padding: 80px 48px 0; }
+.programs-list {
+  margin-top: 40px;
+  border-top: 1px solid var(--rule);
+}
+.prog {
+  display: grid; grid-template-columns: 60px 1fr auto;
+  align-items: center; gap: 40px;
+  padding: 40px 48px; border-bottom: 1px solid var(--rule);
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: background .35s;
+}
+.prog::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+  background: var(--blue-dim);
+  transition: width .45s var(--ease);
+}
+.prog:hover::before { width: 100%; }
+.prog:hover { background: transparent; }
+.prog-num {
+  font-family: var(--disp); font-size: 40px; font-style: italic;
+  color: rgba(68,117,242,.18); line-height: 1;
+  position: relative; z-index: 1;
+  transition: color .3s;
+}
+.prog:hover .prog-num { color: rgba(68,117,242,.5); }
+.prog-body { position: relative; z-index: 1; }
+.prog-name {
+  font-family: var(--sans); font-size: 17px; font-weight: 400;
+  letter-spacing: .04em; color: var(--white); margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.prog-desc { font-size: 12px; color: var(--mid); line-height: 1.8; }
+.prog-tags { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+.prog-tag {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--blue); border: 1px solid var(--blue-line); padding: 3px 8px;
+}
+.prog-arrow {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--rule); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  transition: border-color .3s, background .3s;
+}
+.prog:hover .prog-arrow { border-color: var(--blue); background: var(--blue); }
+.prog-arrow svg { stroke: var(--low); fill: none; stroke-width: 1.5; transition: stroke .3s, transform .3s var(--ease); }
+.prog:hover .prog-arrow svg { stroke: #fff; transform: translateX(2px); }
+
+/* ── LOCATIONS ───────────────────────── */
+#locations { border-top: 1px solid var(--rule); }
+.locations-header { padding: 80px 48px 0; }
+.locations-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 0;
+}
+.loc {
+  background: var(--bg1); padding: 40px 32px;
+  position: relative; overflow: hidden; transition: background .35s;
+}
+.loc:hover { background: var(--bg2); }
+.loc::after {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: var(--blue);
+  transform: scaleY(0); transform-origin: top;
+  transition: transform .4s var(--ease);
+}
+.loc:hover::after { transform: scaleY(1); }
+.loc-num {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 12px;
+}
+.loc-name {
+  font-family: var(--disp); font-size: 32px; letter-spacing: .01em; font-style: italic;
+  color: var(--white); margin-bottom: 20px;
+}
+.loc-info { font-size: 12px; line-height: 2.2; color: var(--mid); }
+.loc-info a { color: var(--blue); }
+
+.map-area {
+  margin: 0 48px;
+  background: var(--bg1); border: 1px solid var(--rule);
+  border-top: none;
+  aspect-ratio: 21/5;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+}
+.map-area svg { stroke: rgba(68,117,242,.25); fill: none; }
+.map-area p {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--lower);
+}
+
+/* ── BOOKING ─────────────────────────── */
 #booking {
-  padding:120px 40px;
-  border-top:1px solid var(--fog);
-  display:grid; grid-template-columns:1fr 1fr;
-  gap:80px;
+  border-top: 1px solid var(--rule);
+  display: grid; grid-template-columns: 1fr 1fr;
 }
-.booking-left { }
-.booking-title { font-family:var(--serif); font-size:clamp(44px,5vw,64px); line-height:.95; margin-bottom:24px; }
-.booking-lead { font-family:var(--jp); font-size:13px; font-weight:300; line-height:2.4; color:var(--dim); margin-bottom:40px; }
-.booking-trust {
-  display:flex; flex-direction:column; gap:14px;
+.booking-left { padding: 96px 48px; border-right: 1px solid var(--rule); }
+.booking-title {
+  font-family: var(--disp);
+  font-size: clamp(44px,5.5vw,68px); line-height: 1.05; font-style: italic;
+  letter-spacing: .01em; color: var(--white); margin-bottom: 28px;
 }
-.trust-item {
-  display:flex; align-items:center; gap:14px;
-  font-family:var(--jp); font-size:12px; font-weight:300; color:var(--dim);
-}
-.trust-dot {
-  width:4px; height:4px; border-radius:50%;
-  background:var(--accent); flex-shrink:0;
-}
+.booking-title i { color: var(--blue); font-style: normal; }
+.booking-lead { font-size: 13px; line-height: 2.5; color: var(--mid); margin-bottom: 48px; }
+.booking-trust { display: flex; flex-direction: column; gap: 14px; }
+.trust-row { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--mid); }
+.trust-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
 
-/* Step form */
-.booking-form {
-  background:var(--ink2);
-  border:1px solid var(--fog);
-  border-top:2px solid var(--accent);
-  padding:48px 40px;
+/* Form */
+.booking-form { padding: 64px 48px; background: var(--bg1); }
+.form-bar { display: flex; gap: 3px; margin-bottom: 36px; }
+.fb { height: 2px; flex: 1; background: var(--rule); transition: background .4s; }
+.fb.on { background: var(--blue); }
+.fstep { display: none; animation: fadeUp .4s var(--ease); }
+.fstep.active { display: block; }
+.fstep-label {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
+  margin-bottom: 12px;
 }
-.form-step { display:none; }
-.form-step.active { display:block; }
-.step-counter {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.2em; text-transform:uppercase; color:var(--accent);
-  margin-bottom:12px;
+.fstep-q {
+  font-family: var(--disp); font-size: 30px; font-style: italic;
+  letter-spacing: .01em;
+  color: var(--white); margin-bottom: 28px; line-height: 1.15;
 }
-.step-q {
-  font-family:var(--serif); font-size:30px; line-height:1.1;
-  margin-bottom:32px;
+.fopts { display: flex; flex-direction: column; gap: 6px; }
+.fopt {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border: 1px solid var(--rule);
+  cursor: pointer; transition: border-color .25s, background .25s;
 }
-.step-options { display:flex; flex-direction:column; gap:8px; }
-.step-option {
-  display:flex; align-items:center; gap:16px;
-  padding:16px 20px;
-  border:1px solid var(--fog);
-  transition:border-color .25s, background .25s;
-  cursor:none;
+.fopt:hover { border-color: var(--blue-line); background: var(--blue-dim); }
+.fopt.sel { border-color: var(--blue); background: var(--blue-dim); }
+.fopt input { display: none; }
+.fopt-radio {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1.5px solid var(--low); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s;
 }
-.step-option:hover { border-color:var(--fog2); background:var(--ink3); }
-.step-option.chosen { border-color:var(--accent); background:rgba(var(--accent-rgb),.05); }
-.opt-radio {
-  width:16px; height:16px; border-radius:50%;
-  border:1.5px solid var(--dim); flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  transition:border-color .2s;
+.fopt.sel .fopt-radio { border-color: var(--blue); }
+.fopt-radio::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--blue); transform: scale(0); transition: transform .2s var(--ease);
 }
-.step-option.chosen .opt-radio { border-color:var(--accent); }
-.opt-radio::after {
-  content:''; width:8px; height:8px; border-radius:50%;
-  background:var(--accent);
-  transform:scale(0); transition:transform .2s var(--ease);
-}
-.step-option.chosen .opt-radio::after { transform:scale(1); }
-.opt-text { font-family:var(--jp); font-size:13px; font-weight:300; color:var(--white); }
-.opt-sub { font-family:var(--jp); font-size:11px; font-weight:300; color:var(--dimmer); margin-top:2px; }
+.fopt.sel .fopt-radio::after { transform: scale(1); }
+.fopt-main { font-size: 13px; font-weight: 300; color: var(--white); }
+.fopt-sub { font-size: 11px; color: var(--low); margin-top: 2px; }
 
-.form-field {
-  display:flex; flex-direction:column; gap:8px; margin-bottom:16px;
+.ffield { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.ffield label {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--low);
 }
-.field-label {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.16em; text-transform:uppercase; color:var(--dim);
+.ffield input {
+  background: transparent; border: none;
+  border-bottom: 1px solid var(--rule);
+  color: var(--white); padding: 11px 0;
+  font-size: 14px; font-weight: 300;
+  font-family: var(--jp); outline: none; width: 100%;
+  transition: border-color .3s;
 }
-.field-input {
-  background:transparent; border:none; border-bottom:1px solid var(--fog2);
-  color:var(--white); padding:12px 0;
-  font-family:var(--jp); font-size:14px; font-weight:300;
-  outline:none; width:100%;
-  transition:border-color .3s;
+.ffield input::placeholder { color: var(--lower); }
+.ffield input:focus { border-color: var(--blue); }
+.fnote { font-size: 11px; color: var(--lower); line-height: 1.9; margin-top: 12px; }
+.fnav { display: flex; gap: 8px; margin-top: 28px; }
+.fnext {
+  flex: 1; background: var(--blue); color: #fff;
+  border: none; padding: 15px;
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  transition: opacity .25s;
 }
-.field-input::placeholder { color:var(--dimmer); }
-.field-input:focus { border-color:var(--accent); }
-.form-note {
-  font-family:var(--jp); font-size:11px; font-weight:300;
-  color:var(--dimmer); line-height:1.8; margin-top:16px;
+.fnext:hover { opacity: .85; }
+.fnext.last { background: var(--white); color: var(--bg); }
+.fnext.last:hover { background: var(--blue); color: #fff; opacity: 1; }
+.fback {
+  background: none; color: var(--low); border: 1px solid var(--rule);
+  padding: 15px 18px;
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: color .25s, border-color .25s;
 }
+.fback:hover { color: var(--white); border-color: var(--lower); }
+.form-done { display: none; text-align: center; padding: 16px 0; }
+.form-done.show { display: block; }
+.done-icon {
+  font-family: var(--disp); font-size: 64px; color: var(--blue);
+  line-height: 1; margin-bottom: 14px; font-style: italic;
+}
+.done-title {
+  font-family: var(--disp); font-size: 38px; color: var(--white);
+  margin-bottom: 12px; font-style: italic;
+}
+.done-body { font-size: 12px; line-height: 2.2; color: var(--mid); }
 
-.form-nav { display:flex; gap:12px; margin-top:32px; }
-.form-next {
-  flex:1; background:var(--accent); color:var(--ink);
-  border:none; padding:16px;
-  font-family:var(--mono); font-size:11px; font-weight:400;
-  letter-spacing:.14em; text-transform:uppercase;
-  transition:background .3s;
-}
-.form-next:hover { background:var(--accent2); }
-.form-next.final { background:var(--white); }
-.form-next.final:hover { background:var(--accent); }
-.form-back {
-  background:transparent; color:var(--dimmer);
-  border:1px solid var(--fog);
-  padding:16px 20px;
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.12em; text-transform:uppercase;
-  transition:all .3s;
-}
-.form-back:hover { border-color:var(--fog2); color:var(--dim); }
-
-.form-progress { display:flex; gap:4px; margin-bottom:32px; }
-.fp { height:2px; flex:1; background:var(--fog); transition:background .4s; }
-.fp.done { background:var(--accent); }
-
-.form-success { display:none; text-align:center; padding:20px 0; }
-.form-success.show { display:block; }
-.success-icon {
-  font-family:var(--serif); font-size:80px; color:var(--accent); line-height:1;
-  margin-bottom:16px;
-}
-.success-title {
-  font-family:var(--serif); font-size:36px; margin-bottom:12px;
-}
-.success-body { font-family:var(--jp); font-size:13px; font-weight:300; color:var(--dim); line-height:2.2; }
-
-/* ─── PRICING ────────────────────────── */
-#pricing { padding:120px 40px; border-top:1px solid var(--fog); }
-.price-grid {
-  display:grid; grid-template-columns:repeat(3,1fr);
-  gap:1px; background:var(--fog);
-  border:1px solid var(--fog);
-  margin-top:48px;
+/* ── PRICING ─────────────────────────── */
+#pricing { border-top: 1px solid var(--rule); }
+.pricing-header { padding: 80px 48px 0; }
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 120px;
 }
 .price-col {
-  background:var(--ink2); padding:48px 36px;
-  display:flex; flex-direction:column;
-  position:relative; overflow:hidden;
-  transition:background .4s;
+  background: var(--bg1); padding: 48px 36px;
+  display: flex; flex-direction: column; transition: background .35s;
 }
-.price-col:hover { background:var(--ink3); }
+.price-col:hover { background: var(--bg2); }
 .price-col.featured {
-  background:var(--ink3);
-  border-top:2px solid var(--accent);
+  background: var(--bg2);
+  border-top: 2px solid var(--blue);
 }
-.price-featured-label {
-  font-family:var(--mono); font-size:8px; font-weight:300;
-  letter-spacing:.2em; text-transform:uppercase; color:var(--accent);
-  margin-bottom:16px;
+.price-badge {
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
+  margin-bottom: 16px;
 }
-.price-plan {
-  font-family:var(--mono); font-size:13px; font-weight:400;
-  letter-spacing:.1em; text-transform:uppercase; color:var(--white);
-  margin-bottom:8px;
+.price-name {
+  font-family: var(--sans); font-size: 13px; font-weight: 400;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--white); margin-bottom: 8px;
 }
-.price-desc {
-  font-family:var(--jp); font-size:12px; font-weight:300;
-  color:var(--dim); line-height:1.8; margin-bottom:28px;
-  min-height:60px;
-}
+.price-desc { font-size: 12px; line-height: 1.9; color: var(--mid); margin-bottom: 28px; min-height: 48px; }
 .price-amount {
-  font-family:var(--serif); font-size:52px; line-height:1;
-  color:var(--white); margin-bottom:6px;
+  font-family: var(--disp); font-size: 56px; line-height: 1; font-style: italic;
+  color: var(--white); margin-bottom: 4px;
 }
-.price-period {
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.12em; color:var(--dimmer);
-  margin-bottom:32px; padding-bottom:32px;
-  border-bottom:1px solid var(--fog);
+.price-per {
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .1em; color: var(--low);
+  margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--rule);
 }
-.price-features { list-style:none; flex:1; display:flex; flex-direction:column; gap:12px; margin-bottom:32px; }
-.price-feature {
-  display:flex; align-items:flex-start; gap:12px;
-  font-family:var(--jp); font-size:12px; font-weight:300; color:var(--dim);
-  line-height:1.7;
+.price-items { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 11px; margin-bottom: 32px; }
+.price-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--mid); line-height: 1.7; }
+.pi-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 8px; }
+.price-btn {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-size: 10px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 13px 20px; border: 1px solid var(--rule);
+  color: var(--low); background: none;
+  transition: border-color .25s, color .25s;
 }
-.feature-dot {
-  width:4px; height:4px; border-radius:50%;
-  background:var(--accent); flex-shrink:0; margin-top:7px;
-}
-.price-cta {
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--mono); font-size:10px; font-weight:400;
-  letter-spacing:.14em; text-transform:uppercase;
-  padding:14px 24px;
-  border:1px solid var(--fog2); color:var(--dim);
-  background:transparent;
-  transition:all .3s;
-  width:100%;
-}
-.price-cta:hover { border-color:var(--accent); color:var(--accent); }
-.price-col.featured .price-cta {
-  background:var(--accent); color:var(--ink);
-  border-color:var(--accent);
-}
-.price-col.featured .price-cta:hover { background:var(--accent2); border-color:var(--accent2); }
+.price-btn:hover { border-color: var(--blue); color: var(--blue); }
+.price-col.featured .price-btn { background: var(--blue); color: #fff; border-color: var(--blue); }
+.price-col.featured .price-btn:hover { opacity: .85; }
 
-/* ─── FAQ ────────────────────────────── */
-#faq { padding:120px 40px; border-top:1px solid var(--fog); }
-.faq-layout { display:grid; grid-template-columns:1fr 2fr; gap:80px; margin-top:48px; }
-.faq-intro {
-  font-family:var(--jp); font-size:13px; font-weight:300;
-  color:var(--dim); line-height:2.4;
+/* ── FAQ ─────────────────────────────── */
+#faq {
+  border-top: 1px solid var(--rule);
+  display: grid; grid-template-columns: 1fr 2fr; gap: 0;
 }
-.faq-list { display:flex; flex-direction:column; }
-.faq-item { border-bottom:1px solid var(--fog); }
-.faq-trigger {
-  width:100%; display:flex; justify-content:space-between; align-items:center;
-  padding:28px 0; background:none; border:none; color:var(--white);
-  cursor:none; text-align:left; gap:24px;
-  transition:color .3s;
+.faq-left {
+  padding: 96px 48px; border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 24px;
 }
-.faq-trigger:hover { color:var(--accent); }
-.faq-q { font-family:var(--jp); font-size:14px; font-weight:400; flex:1; }
+.faq-intro { font-size: 13px; line-height: 2.5; color: var(--mid); }
+.faq-right { padding: 96px 48px; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid var(--rule); }
+.faq-q-btn {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  padding: 26px 0; background: none; border: none; color: var(--white);
+  cursor: pointer; text-align: left; gap: 24px; transition: color .25s;
+}
+.faq-q-btn:hover { color: var(--blue); }
+.faq-q-text { font-size: 13px; font-weight: 400; font-family: var(--jp); flex: 1; }
 .faq-icon {
-  width:24px; height:24px; border-radius:50%;
-  border:1px solid var(--fog2); flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-  font-family:var(--mono); font-size:16px; color:var(--dim); font-weight:200;
-  transition:all .3s var(--ease);
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: var(--low); font-family: var(--sans); font-weight: 200;
+  flex-shrink: 0; transition: all .3s var(--ease);
 }
-.faq-item.open .faq-icon { border-color:var(--accent); color:var(--accent); transform:rotate(45deg); }
-.faq-answer {
-  max-height:0; overflow:hidden;
-  transition:max-height .5s var(--ease), padding .3s;
-}
-.faq-item.open .faq-answer { max-height:300px; }
-.faq-a-inner {
-  font-family:var(--jp); font-size:13px; font-weight:300;
-  color:var(--dim); line-height:2.4; padding-bottom:28px;
-}
+.faq-item.open .faq-icon { border-color: var(--blue); color: var(--blue); transform: rotate(45deg); }
+.faq-ans { max-height: 0; overflow: hidden; transition: max-height .5s var(--ease); }
+.faq-item.open .faq-ans { max-height: 300px; }
+.faq-ans-inner { font-size: 12px; line-height: 2.5; color: var(--mid); padding-bottom: 26px; }
 
-/* ─── ACCESS ─────────────────────────── */
-#access { padding:120px 40px; border-top:1px solid var(--fog); }
-.access-layout { display:grid; grid-template-columns:1fr 1fr; gap:64px; margin-top:48px; }
-.access-info { display:flex; flex-direction:column; gap:32px; }
-.access-row { display:flex; flex-direction:column; gap:8px; }
-.access-label {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.18em; text-transform:uppercase; color:var(--accent);
-}
-.access-val { font-family:var(--jp); font-size:14px; font-weight:300; color:var(--white); line-height:1.9; }
-.access-val a { color:var(--accent); }
-.access-map {
-  background:var(--ink2); border:1px solid var(--fog);
-  display:flex; align-items:center; justify-content:center;
-  aspect-ratio:16/10; flex-direction:column; gap:10px;
-}
-.access-map svg { stroke:rgba(var(--accent-rgb),.3); fill:none; }
-.access-map p {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.18em; text-transform:uppercase; color:var(--dimmer);
-}
-
-/* ─── FINAL CTA ──────────────────────── */
+/* ── FINALE ──────────────────────────── */
 #finale {
-  padding:160px 40px;
-  border-top:1px solid var(--fog);
-  text-align:center;
-  position:relative; overflow:hidden;
+  border-top: 1px solid var(--rule);
+  padding: 160px 48px; text-align: center;
+  position: relative; overflow: hidden;
 }
-.finale-bg {
-  position:absolute; inset:0;
-  background:
-    radial-gradient(ellipse 60% 60% at 50% 50%, rgba(var(--accent-rgb),.06) 0%, transparent 70%),
-    var(--ink);
+.finale-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 60% at 50% 60%, rgba(68,117,242,.12) 0%, transparent 65%);
 }
-.finale-content { position:relative; z-index:1; }
+.finale-inner { position: relative; z-index: 1; }
 .finale-eyebrow {
-  font-family:var(--mono); font-size:10px; font-weight:300;
-  letter-spacing:.22em; text-transform:uppercase; color:var(--accent);
-  margin-bottom:32px;
-  display:flex; align-items:center; justify-content:center; gap:14px;
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--blue);
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 36px;
 }
-.finale-eyebrow::before,.finale-eyebrow::after {
-  content:''; display:block; width:40px; height:1px; background:var(--accent);
+.finale-eyebrow::before, .finale-eyebrow::after {
+  content: ''; display: block; width: 40px; height: 1px; background: var(--blue);
 }
 .finale-h {
-  font-family:var(--serif);
-  font-size:clamp(56px,8vw,100px);
-  line-height:.9; letter-spacing:.02em;
-  margin-bottom:32px;
+  font-family: var(--disp);
+  font-size: clamp(60px,8.5vw,110px); line-height: 1.0; font-style: italic;
+  letter-spacing: .01em; color: var(--white); margin-bottom: 24px;
 }
-.finale-h .accent { color:var(--accent); }
+.finale-h i { color: var(--blue); font-style: normal; }
 .finale-sub {
-  font-family:var(--jp); font-size:14px; font-weight:300;
-  color:var(--dim); line-height:2.4; max-width:380px; margin:0 auto 56px;
+  font-size: 13px; line-height: 2.5; color: var(--mid);
+  max-width: 360px; margin: 0 auto 56px;
 }
-.finale-actions { display:flex; gap:16px; justify-content:center; }
+.finale-actions { display: flex; gap: 14px; justify-content: center; }
 
-/* ─── FOOTER ─────────────────────────── */
+/* ── FOOTER ──────────────────────────── */
 footer {
-  border-top:1px solid var(--fog);
-  padding:48px 40px;
-  display:flex; align-items:center; justify-content:space-between;
+  border-top: 1px solid var(--rule); padding: 44px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg1);
 }
-.footer-logo { font-family:var(--serif); font-size:16px; letter-spacing:.1em; }
-.footer-logo span { color:var(--accent); }
+.footer-logo { font-family: var(--disp); font-size: 17px; letter-spacing: .08em; font-style: italic; }
+.footer-logo em { color: var(--blue); font-style: normal; }
 .footer-copy {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--dimmer);
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--lower);
 }
 
-/* ─── STICKY BAR ─────────────────────── */
+/* ── STICKY ──────────────────────────── */
 #sticky {
-  position:fixed; bottom:0; left:0; right:0; z-index:400;
-  background:rgba(10,9,8,.96);
-  border-top:1px solid var(--fog);
-  backdrop-filter:blur(20px);
-  padding:16px 40px;
-  display:flex; align-items:center; justify-content:space-between;
-  transform:translateY(100%);
-  transition:transform .5s var(--ease);
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 400;
+  background: rgba(7,10,18,.94);
+  border-top: 1px solid var(--rule);
+  backdrop-filter: blur(20px) saturate(1.3);
+  padding: 14px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  transform: translateY(100%);
+  transition: transform .5s var(--ease);
 }
-#sticky.show { transform:translateY(0); }
-.sticky-text { }
-.sticky-title {
-  font-family:var(--mono); font-size:13px; font-weight:400;
-  letter-spacing:.04em; color:var(--white);
+#sticky.show { transform: translateY(0); }
+.sticky-label .st-main {
+  font-family: var(--sans); font-size: 14px; font-weight: 400;
+  color: var(--white); letter-spacing: .02em;
 }
-.sticky-sub {
-  font-family:var(--mono); font-size:9px; font-weight:300;
-  letter-spacing:.14em; text-transform:uppercase; color:var(--accent);
-  margin-top:3px;
+.sticky-label .st-sub {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--blue);
+  margin-top: 2px;
 }
 .sticky-btn {
-  font-family:var(--mono); font-size:11px; font-weight:400;
-  letter-spacing:.14em; text-transform:uppercase;
-  background:var(--accent); color:var(--ink); border:none;
-  padding:13px 28px; transition:background .3s;
-  flex-shrink:0;
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  background: var(--blue); color: #fff; border: none;
+  padding: 13px 26px; flex-shrink: 0; transition: opacity .25s;
 }
-.sticky-btn:hover { background:var(--accent2); }
+.sticky-btn:hover { opacity: .85; }
 
-/* ─── ANIMATIONS ─────────────────────── */
-@keyframes heroReveal {
-  from { opacity:0; transform:translateY(16px); }
-  to { opacity:1; transform:translateY(0); }
-}
-@keyframes lineReveal {
-  from { opacity:0; transform:translateY(100%); }
-  to { opacity:1; transform:translateY(0); }
-}
+/* ── ANIMATION ───────────────────────── */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideUp  { from{opacity:0;transform:translateY(108%)} to{opacity:1;transform:translateY(0)} }
 
-.reveal {
-  opacity:0; transform:translateY(28px);
-  transition:opacity .9s var(--ease), transform .9s var(--ease);
+.fade-up {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .85s var(--ease), transform .85s var(--ease);
 }
-.reveal.in { opacity:1; transform:translateY(0); }
-.reveal-l { opacity:0; transform:translateX(-28px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
-.reveal-l.in { opacity:1; transform:translateX(0); }
-.reveal-r { opacity:0; transform:translateX(28px); transition:opacity .9s var(--ease), transform .9s var(--ease); }
-.reveal-r.in { opacity:1; transform:translateX(0); }
-.d1 { transition-delay:.1s } .d2 { transition-delay:.2s } .d3 { transition-delay:.3s }
-.d4 { transition-delay:.4s } .d5 { transition-delay:.5s }
+.fade-up.in { opacity: 1; transform: translateY(0); }
+.fade-l {
+  opacity: 0; transform: translateX(-22px);
+  transition: opacity .85s var(--ease), transform .85s var(--ease);
+}
+.fade-l.in { opacity: 1; transform: translateX(0); }
+.fade-r {
+  opacity: 0; transform: translateX(22px);
+  transition: opacity .85s var(--ease), transform .85s var(--ease);
+}
+.fade-r.in { opacity: 1; transform: translateX(0); }
+.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
 
-/* ─── MOBILE ─────────────────────────── */
+/* ── MOBILE ──────────────────────────── */
 @media(max-width:768px){
-  body { cursor:auto; }
-  #cursor,#cursor-ring { display:none; }
   #nav { padding:0 20px; }
-  .nav-links { display:none; }
-  #hero .hero-content { padding:0 20px 56px; }
-  #hero .hero-photo-frame { width:0; }
-  #metrics { grid-template-columns:1fr 1fr; }
-  .metric-cell:nth-child(3) { grid-column:span 2; border-right:none; }
-  #philosophy { grid-template-columns:1fr; gap:40px; padding:72px 20px; }
-  .phil-visual { display:none; }
-  .section-header { padding:64px 20px 36px; flex-direction:column; align-items:flex-start; gap:12px; }
-  .prog-row { grid-template-columns:1fr; gap:16px; padding:28px 20px; }
-  .prog-index { font-size:28px; }
-  #trainer { padding:72px 0; }
-  .trainer-header { padding:0 20px 40px; }
-  .trainer-layout { grid-template-columns:1fr; }
-  .trainer-story { padding:36px 20px; }
-  #transformations { padding:72px 20px; }
-  .trans-grid { grid-template-columns:1fr; }
-  #booking { grid-template-columns:1fr; gap:40px; padding:72px 20px; }
-  .booking-form { padding:28px 20px; }
-  #pricing { padding:72px 20px; }
-  .price-grid { grid-template-columns:1fr; }
-  #faq { padding:72px 20px; }
-  .faq-layout { grid-template-columns:1fr; gap:32px; }
-  #access { padding:72px 20px; }
-  .access-layout { grid-template-columns:1fr; }
+  .nav-mid { display:none; }
+  #hero .hero-content { padding:0 20px 64px; }
+  #numbers { grid-template-columns:1fr 1fr; }
+  .num-cell:nth-child(even){ border-right:none; }
+  .num-cell:nth-child(3),.num-cell:nth-child(4){ border-top:1px solid var(--rule); }
+  #concept { grid-template-columns:1fr; }
+  .concept-left { padding:64px 20px; }
+  .concept-right { padding:48px 20px; }
+  .concept-photo { min-height:200px; }
+  #trainer { grid-template-columns:1fr; }
+  .trainer-body { padding:40px 20px; }
+  .trainer-creds { grid-template-columns:1fr 1fr; }
+  #results .results-header { padding:64px 20px 0; }
+  .results-grid { margin:40px 20px 0; grid-template-columns:1fr; }
+  .programs-header { padding:64px 20px 0; }
+  .prog { grid-template-columns:1fr; gap:12px; padding:24px 20px; }
+  .locations-header { padding:64px 20px 0; }
+  .locations-grid { margin:40px 20px 0; grid-template-columns:1fr; }
+  .map-area { margin:0 20px; }
+  #booking { grid-template-columns:1fr; }
+  .booking-left { padding:64px 20px; border-right:none; border-bottom:1px solid var(--rule); }
+  .booking-form { padding:48px 20px; }
+  .pricing-header { padding:64px 20px 0; }
+  .pricing-grid { margin:40px 20px 64px; grid-template-columns:1fr; }
+  #faq { grid-template-columns:1fr; }
+  .faq-left { padding:64px 20px 40px; border-right:none; border-bottom:1px solid var(--rule); }
+  .faq-right { padding:48px 20px; }
   #finale { padding:100px 20px; }
   .finale-actions { flex-direction:column; align-items:center; }
-  footer { padding:32px 20px; flex-direction:column; gap:12px; text-align:center; }
+  footer { padding:32px 20px; flex-direction:column; gap:10px; text-align:center; }
   #sticky { padding:14px 20px; }
-  .trainer-creds { grid-template-columns:1fr 1fr; }
 }
 </style>
 </head>
 <body>
 
-<div id="grain" aria-hidden="true"></div>
-<div id="cursor" aria-hidden="true"></div>
-<div id="cursor-ring" aria-hidden="true"></div>
-
-<!-- NAV -->
+<!-- ── NAV ───────────────────────────── -->
 <nav id="nav">
-  <a href="#" class="nav-wordmark">ZERO<span> FITNESS</span></a>
-  <div class="nav-right">
-    <div class="nav-links">
-      <a class="nav-link" href="#programs">プログラム</a>
-      <a class="nav-link" href="#trainer">トレーナー</a>
-      <a class="nav-link" href="#pricing">料金</a>
-      <a class="nav-link" href="#access">アクセス</a>
-    </div>
-    <button class="nav-cta" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">体験予約</button>
+  <div class="logo">BI<em>BODY</em>FIT</div>
+  <div class="nav-mid">
+    <a class="nav-a" href="#concept">コンセプト</a>
+    <a class="nav-a" href="#programs">プログラム</a>
+    <a class="nav-a" href="#locations">店舗</a>
+    <a class="nav-a" href="#pricing">料金</a>
   </div>
+  <button class="nav-cta" onclick="go('booking')">無料体験を予約</button>
 </nav>
 
-<!-- HERO -->
+<!-- ── HERO ──────────────────────────── -->
 <section id="hero">
-  <div class="hero-visual">
-    <div class="atmo atmo-1"></div>
-    <div class="atmo atmo-2"></div>
-    <div class="hero-photo-area">
-      <div class="hero-photo-frame">
-        <div class="hero-photo-inner">
-          <!-- ↓ ここに高品質なトレーニング写真が入ります -->
-          <div class="photo-hint">
-            <div class="photo-hint-line"></div>
-            <div class="photo-hint-text">Photo — Trainer in Studio</div>
-            <div class="photo-hint-line"></div>
-          </div>
-        </div>
-      </div>
-    </div>
+  <!-- Full-bleed background photo -->
+  <div class="hero-photo">
+    <!-- Unsplash: athletic woman training, dark moody lighting -->
+    <img
+      src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1800&q=85&auto=format&fit=crop"
+      alt="トレーニング"
+      loading="eager"
+    >
+    <div class="hero-photo-fallback"></div>
   </div>
-  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
   <div class="hero-content">
-    <div class="hero-eyebrow">Personal Training Studio</div>
-    <h1 class="hero-h1">
-      <span class="hero-h1-line">身体を</span>
-      <span class="hero-h1-line">変える。</span>
-      <span class="hero-h1-line">人生が動く。</span>
+    <div class="hero-label">Personal Training Studio — 埼玉・群馬 3店舗</div>
+    <h1 class="hero-h">
+      <span class="hero-h-row"><span class="hero-h-inner">美しい</span></span>
+      <span class="hero-h-row"><span class="hero-h-inner">Body</span></span>
+      <span class="hero-h-row"><span class="hero-h-inner">をつくる</span></span>
     </h1>
-    <p class="hero-sub">効果的なトレーニング設計と、食事・生活習慣への一貫したアドバイス。あなたの目標に、確実に届きます。</p>
+    <p class="hero-sub">初心者から経験者まで。<br>科学的なアプローチで、あなたの身体を丁寧に変えていきます。</p>
     <div class="hero-actions">
-      <a href="#booking" class="btn-primary" onclick="this.closest('section').nextElementSibling; document.getElementById('booking').scrollIntoView({behavior:'smooth'}); return false;">
+      <button class="btn-fill" onclick="go('booking')">
         無料体験を予約する
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </a>
-      <a href="#programs" class="btn-secondary">プログラムを見る</a>
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <a href="#concept" class="btn-line">詳しく見る</a>
     </div>
   </div>
+
   <div class="hero-scroll" aria-hidden="true">
-    <div class="scroll-track"><div class="scroll-fill"></div></div>
-    <div class="scroll-label">scroll</div>
+    <div class="scroll-bar"></div>
+    <div class="scroll-text">scroll</div>
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee-wrap" aria-hidden="true">
-  <div class="marquee-track">
-    <div class="marquee-item">Personal Training</div>
-    <div class="marquee-item accent">身体を変える</div>
-    <div class="marquee-item">Nutrition Coaching</div>
-    <div class="marquee-item">Individual Program</div>
-    <div class="marquee-item accent">完全個室</div>
-    <div class="marquee-item">Body Composition</div>
-    <div class="marquee-item">Lifestyle Support</div>
-    <div class="marquee-item accent">無料体験実施中</div>
-    <div class="marquee-item">Personal Training</div>
-    <div class="marquee-item accent">身体を変える</div>
-    <div class="marquee-item">Nutrition Coaching</div>
-    <div class="marquee-item">Individual Program</div>
-    <div class="marquee-item accent">完全個室</div>
-    <div class="marquee-item">Body Composition</div>
-    <div class="marquee-item">Lifestyle Support</div>
-    <div class="marquee-item accent">無料体験実施中</div>
+<!-- ── TICKER ─────────────────────────── -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">Personal Training</span>
+    <span class="ticker-item accent">美しい身体をつくる</span>
+    <span class="ticker-item">Body Make</span>
+    <span class="ticker-item">3 Locations</span>
+    <span class="ticker-item accent">埼玉・群馬</span>
+    <span class="ticker-item">Diet Coaching</span>
+    <span class="ticker-item">Posture Analysis</span>
+    <span class="ticker-item accent">無料体験実施中</span>
+    <span class="ticker-item">Personal Training</span>
+    <span class="ticker-item accent">美しい身体をつくる</span>
+    <span class="ticker-item">Body Make</span>
+    <span class="ticker-item">3 Locations</span>
+    <span class="ticker-item accent">埼玉・群馬</span>
+    <span class="ticker-item">Diet Coaching</span>
+    <span class="ticker-item">Posture Analysis</span>
+    <span class="ticker-item accent">無料体験実施中</span>
   </div>
 </div>
 
-<!-- METRICS -->
-<section id="metrics">
-  <div class="metric-cell reveal">
-    <div class="metric-num" data-target="500" data-suffix="+"><span>0</span></div>
-    <div class="metric-label">Total Members</div>
-    <div class="metric-sub">延べ指導人数</div>
+<!-- ── NUMBERS ────────────────────────── -->
+<section id="numbers">
+  <div class="num-cell fade-up">
+    <div class="num-n" data-target="3" data-suffix="店舗"><span>0</span></div>
+    <div class="num-en">Locations</div>
+    <div class="num-jp">埼玉・群馬</div>
   </div>
-  <div class="metric-cell reveal d1">
-    <div class="metric-num" data-target="92" data-suffix="%"><span>0</span></div>
-    <div class="metric-label">Goal Achievement</div>
-    <div class="metric-sub">目標達成率</div>
+  <div class="num-cell fade-up d1">
+    <div class="num-n" data-target="300" data-suffix="+"><span>0</span></div>
+    <div class="num-en">Members</div>
+    <div class="num-jp">延べ指導人数</div>
   </div>
-  <div class="metric-cell reveal d2">
-    <div class="metric-num" data-target="10" data-suffix="+"><span>0</span></div>
-    <div class="metric-label">Years Experience</div>
-    <div class="metric-sub">トレーナー経験年数</div>
+  <div class="num-cell fade-up d2">
+    <div class="num-n" data-target="90" data-suffix="%"><span>0</span></div>
+    <div class="num-en">Goal Achievement</div>
+    <div class="num-jp">目標達成率</div>
+  </div>
+  <div class="num-cell fade-up d3">
+    <div class="num-n" data-target="93" data-suffix="%"><span>0</span></div>
+    <div class="num-en">Continuation</div>
+    <div class="num-jp">3ヶ月継続率</div>
   </div>
 </section>
 
-<!-- PHILOSOPHY -->
-<section id="philosophy">
-  <div class="reveal-l">
-    <div class="phil-label">Philosophy</div>
-    <h2 class="phil-h2">ゼロから<br>設計する。</h2>
-    <div class="phil-body">
-      <p>どんなに優れたプログラムも、あなたの身体でなければ意味がない。ZERO FITNESSでは、体組成測定・姿勢評価・動作分析から始め、データと対話を重ねて個別のプログラムを設計します。</p>
-      <p>トレーニングは、変化の始まりにすぎません。食事、睡眠、日常の動き方——168時間の生活全体を見直すことで、身体は確かに応えます。</p>
+<!-- ── CONCEPT ────────────────────────── -->
+<section id="concept">
+  <div class="concept-left">
+    <div class="eyebrow fade-up">Philosophy</div>
+    <h2 class="sec-title fade-up">ただ痩せるのでは<br>なく、<i>美しく</i>変わる</h2>
+    <div class="concept-lead fade-up">
+      <p>BIBODYFITは、体重の数字だけを追うのではなく、姿勢・筋バランス・体脂肪率——身体のすべてを整えることに焦点を当てています。</p>
+      <p>「美しくなりたい」という想いに、科学と誠実さで応えるために。データと対話を重ねながら、あなただけの変化を設計します。</p>
+    </div>
+    <div class="pillars fade-up">
+      <div class="pillar">
+        <div class="pillar-n">01</div>
+        <div class="pillar-body">
+          <h4>Complete Analysis</h4>
+          <p>体組成・姿勢・動作のデータから、個別プログラムを設計します。</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-n">02</div>
+        <div class="pillar-body">
+          <h4>Expert Coaching</h4>
+          <p>専任トレーナーが1対1で、フォームから食事まで丁寧に指導します。</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-n">03</div>
+        <div class="pillar-body">
+          <h4>Sustainable Results</h4>
+          <p>リバウンドしない習慣づくりを、生活習慣の改善とセットで進めます。</p>
+        </div>
+      </div>
     </div>
   </div>
-  <div class="phil-visual reveal-r">
-    <div class="phil-visual-inner">
-      <!-- ↓ スタジオ・設備の写真がここに入ります -->
-      <div class="visual-placeholder">
-        <svg class="vp-icon" viewBox="0 0 48 48" fill="none" stroke="rgba(var(--accent-rgb),.3)" stroke-width="1">
-          <rect x="4" y="4" width="40" height="40" rx="2"/>
-          <circle cx="18" cy="20" r="6"/>
-          <path d="M4 40 L16 28 L24 34 L34 22 L44 32"/>
+  <div class="concept-right fade-r">
+    <div class="concept-photo">
+      <!-- ここにスタジオ写真が入ります -->
+      <div class="concept-photo-label">
+        <svg width="52" height="52" viewBox="0 0 52 52">
+          <rect x="3" y="3" width="46" height="46" rx="2"/>
+          <circle cx="19" cy="20" r="7"/>
+          <path d="M3 46 L16 32 L25 40 L37 24 L49 36"/>
         </svg>
-        <div class="vp-text">Studio Interior<br>Photography</div>
+        <span>Studio Interior<br>Photography</span>
       </div>
     </div>
-    <div class="phil-visual-accent"></div>
-    <div class="phil-caption">Sakado Studio</div>
-  </div>
-</section>
-
-<!-- PROGRAMS -->
-<section id="programs">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-label">Programs</div>
-      <h2 class="section-title">目的から<br>設計する。</h2>
-    </div>
-  </div>
-  <div class="program-table">
-    <div class="prog-row reveal">
-      <div class="prog-index">01</div>
-      <div class="prog-main">
-        <div class="prog-name">Body Recomposition</div>
-        <div class="prog-desc">脂肪を減らし、筋肉を整え、理想のプロポーションへ。体組成データに基づいた最短経路を歩む。</div>
-        <div class="prog-tags">
-          <div class="prog-tag">Diet</div>
-          <div class="prog-tag">Body Make</div>
-          <div class="prog-tag">Nutrition</div>
-        </div>
+    <div class="concept-data">
+      <div class="data-row">
+        <span class="data-k">ダイエット成功率</span>
+        <span class="data-v">90%</span>
       </div>
-      <div class="prog-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <div class="data-row">
+        <span class="data-k">3ヶ月後リバウンドなし</span>
+        <span class="data-v">85%</span>
       </div>
-    </div>
-    <div class="prog-row reveal d1">
-      <div class="prog-index">02</div>
-      <div class="prog-main">
-        <div class="prog-name">Strength & Performance</div>
-        <div class="prog-desc">筋力・筋量・競技パフォーマンスの向上。ピリオダイゼーションに基づく、本物の強さを構築する。</div>
-        <div class="prog-tags">
-          <div class="prog-tag">Muscle</div>
-          <div class="prog-tag">Athletic</div>
-          <div class="prog-tag">Performance</div>
-        </div>
-      </div>
-      <div class="prog-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-    </div>
-    <div class="prog-row reveal d2">
-      <div class="prog-index">03</div>
-      <div class="prog-main">
-        <div class="prog-name">Functional Recovery</div>
-        <div class="prog-desc">姿勢改善、慢性的な腰痛・肩こりの根本からの解消。身体の機能を取り戻す。</div>
-        <div class="prog-tags">
-          <div class="prog-tag">Rehab</div>
-          <div class="prog-tag">Posture</div>
-          <div class="prog-tag">Mobility</div>
-        </div>
-      </div>
-      <div class="prog-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-      </div>
-    </div>
-    <div class="prog-row reveal d3">
-      <div class="prog-index">04</div>
-      <div class="prog-main">
-        <div class="prog-name">Event Preparation</div>
-        <div class="prog-desc">結婚式、成人式、大会——特別な日に向けた集中的なアプローチ。逆算設計と高密度サポート。</div>
-        <div class="prog-tags">
-          <div class="prog-tag">Wedding</div>
-          <div class="prog-tag">Competition</div>
-          <div class="prog-tag">Peak</div>
-        </div>
-      </div>
-      <div class="prog-arrow">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="1.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      <div class="data-row">
+        <span class="data-k">3ヶ月以上継続率</span>
+        <span class="data-v">93%</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TRAINER -->
+<!-- ── TRAINER ────────────────────────── -->
 <section id="trainer">
-  <div class="trainer-header reveal">
-    <div class="section-label">Trainer</div>
-    <h2 class="section-title">指導者について</h2>
+  <div class="trainer-photo fade-l">
+    <!-- ここにトレーナー写真が入ります -->
+    <div class="trainer-photo-hint">
+      <svg width="56" height="72" viewBox="0 0 56 72">
+        <circle cx="28" cy="20" r="13"/>
+        <path d="M2 68 C2 50 10 42 28 42 C46 42 54 50 54 68"/>
+      </svg>
+      <span>Trainer Portrait</span>
+    </div>
+    <div class="trainer-caption">
+      <div class="trainer-name">田中 ◯◯</div>
+      <div class="trainer-role">Head Trainer</div>
+    </div>
   </div>
-  <div class="trainer-layout">
-    <div class="trainer-portrait reveal-l">
-      <div class="trainer-portrait-bg">
-        <!-- ↓ トレーナーの写真がここに入ります -->
-        <div class="portrait-placeholder">
-          <svg width="60" height="80" viewBox="0 0 60 80">
-            <circle cx="30" cy="22" r="14"/>
-            <path d="M2 72 C2 50 12 42 30 42 C48 42 58 50 58 72"/>
-          </svg>
-          <span>Trainer Portrait</span>
-        </div>
+  <div class="trainer-body fade-r">
+    <blockquote class="trainer-quote">
+      「美しくなりたいという気持ちに、全力で応え続けることが、私の仕事です。」
+    </blockquote>
+    <div class="trainer-text">
+      <p>自分自身がかつて体型にコンプレックスを抱えていた。何をやっても変われないと思っていた時期があった。だからこそ、クライアントの「変わりたい」という言葉の重さが、心からわかります。</p>
+      <p>難しいことは何もない。正しい知識と方法で、丁寧に継続すること——それだけで、身体は必ず応えてくれます。そのプロセスに伴走するのが、BIBODYFITのあり方です。</p>
+    </div>
+    <div class="trainer-creds">
+      <div class="cred"><div class="cred-l">指導歴</div><div class="cred-v">8年以上</div></div>
+      <div class="cred"><div class="cred-l">指導実績</div><div class="cred-v">300名以上</div></div>
+      <div class="cred"><div class="cred-l">得意分野</div><div class="cred-v">女性ボディメイク</div></div>
+      <div class="cred"><div class="cred-l">資格</div><div class="cred-v">NSCA-CPT</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── RESULTS ────────────────────────── -->
+<section id="results">
+  <div class="results-header">
+    <div class="eyebrow fade-up">Member Stories</div>
+    <h2 class="sec-title fade-up">変化の<i>記録</i></h2>
+  </div>
+  <div class="results-grid">
+    <div class="result-card fade-up">
+      <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
+      <div class="rc-name">A.K さん — 30歳 / OL</div>
+      <div class="rc-meta">入会3ヶ月 · 志木店</div>
+      <div class="rc-data">
+        <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 7.5 kg</div></div>
+        <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 4.8 %</div></div>
+        <div class="rc-datum"><div class="rd-k">ウエスト</div><div class="rd-v">− 7 cm</div></div>
       </div>
-      <div class="portrait-overlay">
-        <div class="portrait-name">田中 ◯◯</div>
-        <div class="portrait-title">Head Trainer</div>
+      <p class="rc-quote">「食事を我慢しなくていいと言われて半信半疑でしたが、3ヶ月で仕事着のサイズが変わりました。」</p>
+    </div>
+    <div class="result-card fade-up d1">
+      <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
+      <div class="rc-name">M.S さん — 38歳 / 主婦</div>
+      <div class="rc-meta">入会2ヶ月 · 坂戸店</div>
+      <div class="rc-data">
+        <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 5.8 kg</div></div>
+        <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 3.9 %</div></div>
+        <div class="rc-datum"><div class="rd-k">姿勢</div><div class="rd-v">改善</div></div>
+      </div>
+      <p class="rc-quote">「産後の身体をよく理解してくれて安心して通えました。友人に別人みたいと言われています。」</p>
+    </div>
+    <div class="result-card fade-up d2">
+      <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
+      <div class="rc-name">Y.T さん — 25歳 / 看護師</div>
+      <div class="rc-meta">入会4ヶ月 · 伊勢崎店</div>
+      <div class="rc-data">
+        <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 9.2 kg</div></div>
+        <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 5.5 %</div></div>
+        <div class="rc-datum"><div class="rd-k">不規則勤務対応</div><div class="rd-v">○</div></div>
+      </div>
+      <p class="rc-quote">「夜勤のある生活でも無理なく続けられました。自分の身体への自信が戻ってきました。」</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROGRAMS ────────────────────────── -->
+<section id="programs">
+  <div class="programs-header">
+    <div class="eyebrow fade-up">Programs</div>
+    <h2 class="sec-title fade-up">あなたに合った<i>プログラム</i></h2>
+  </div>
+  <div class="programs-list">
+    <div class="prog fade-up">
+      <div class="prog-num">01</div>
+      <div class="prog-body">
+        <div class="prog-name">Body Make</div>
+        <div class="prog-desc">美しいプロポーションを科学的に設計する。体組成データに基づいた個別アプローチ。</div>
+        <div class="prog-tags"><span class="prog-tag">Diet</span><span class="prog-tag">Shape</span><span class="prog-tag">Nutrition</span></div>
+      </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </div>
     </div>
-    <div class="trainer-story reveal-r">
-      <blockquote class="trainer-quote">「身体が変わると、自分への信頼が戻ってくる。それが、この仕事を続ける理由です。」</blockquote>
-      <div class="trainer-body">
-        <p>かつて自分自身が、変わることを諦めかけていた時期があります。何度も試み、何度も失敗した。その経験があるから、クライアントの「またダメかもしれない」という不安が手に取るようにわかります。</p>
-        <p>パーソナルトレーニングは、単なる運動指導ではありません。その人の生活を理解し、習慣を変え、自己効力感を育てていくプロセスです。10年以上の経験から確信しているのは、正しい方法で続ければ、身体は必ず応えるということ。</p>
+    <div class="prog fade-up d1">
+      <div class="prog-num">02</div>
+      <div class="prog-body">
+        <div class="prog-name">Diet & Slim</div>
+        <div class="prog-desc">食べながら、健康的に痩せる。リバウンドしない身体と習慣を同時につくる。</div>
+        <div class="prog-tags"><span class="prog-tag">Slim</span><span class="prog-tag">Habit</span><span class="prog-tag">Lifestyle</span></div>
       </div>
-      <div class="trainer-creds">
-        <div class="cred-cell">
-          <div class="cred-label">Certification</div>
-          <div class="cred-val">NSCA-CPT</div>
-        </div>
-        <div class="cred-cell">
-          <div class="cred-label">Experience</div>
-          <div class="cred-val">10年以上</div>
-        </div>
-        <div class="cred-cell">
-          <div class="cred-label">Specialty</div>
-          <div class="cred-val">Body Recomp</div>
-        </div>
-        <div class="cred-cell">
-          <div class="cred-label">Clients</div>
-          <div class="cred-val">500名以上</div>
-        </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
+    <div class="prog fade-up d2">
+      <div class="prog-num">03</div>
+      <div class="prog-body">
+        <div class="prog-name">Posture & Recovery</div>
+        <div class="prog-desc">姿勢改善、肩こり・腰痛・産後の回復。身体の機能から美しさを取り戻す。</div>
+        <div class="prog-tags"><span class="prog-tag">Posture</span><span class="prog-tag">Rehab</span><span class="prog-tag">Core</span></div>
+      </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
+    <div class="prog fade-up d3">
+      <div class="prog-num">04</div>
+      <div class="prog-body">
+        <div class="prog-name">Wedding & Special</div>
+        <div class="prog-desc">結婚式、成人式——特別な日のための集中設計。逆算したピークアプローチ。</div>
+        <div class="prog-tags"><span class="prog-tag">Wedding</span><span class="prog-tag">Event</span><span class="prog-tag">Peak</span></div>
+      </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </div>
     </div>
   </div>
 </section>
 
-<!-- TRANSFORMATIONS -->
-<section id="transformations">
-  <div class="section-header reveal" style="padding:0 0 0">
-    <div>
-      <div class="section-label">Member Stories</div>
-      <h2 class="section-title">変化の記録</h2>
+<!-- ── LOCATIONS ──────────────────────── -->
+<section id="locations">
+  <div class="locations-header">
+    <div class="eyebrow fade-up">Locations</div>
+    <h2 class="sec-title fade-up">3つの<i>スタジオ</i></h2>
+  </div>
+  <div class="locations-grid">
+    <div class="loc fade-up">
+      <div class="loc-num">Store 01</div>
+      <div class="loc-name">志木店</div>
+      <div class="loc-info">埼玉県志木市○○1-2-3<br>TEL <a href="tel:000-0000-0000">000·0000·0000</a><br>平日 10:00 — 21:00<br>土日祝 10:00 — 19:00</div>
+    </div>
+    <div class="loc fade-up d1">
+      <div class="loc-num">Store 02</div>
+      <div class="loc-name">坂戸店</div>
+      <div class="loc-info">埼玉県坂戸市○○4-5-6<br>TEL <a href="tel:000-0000-0000">000·0000·0000</a><br>平日 10:00 — 21:00<br>土日祝 10:00 — 19:00</div>
+    </div>
+    <div class="loc fade-up d2">
+      <div class="loc-num">Store 03</div>
+      <div class="loc-name">伊勢崎店</div>
+      <div class="loc-info">群馬県伊勢崎市○○7-8-9<br>TEL <a href="tel:000-0000-0000">000·0000·0000</a><br>平日 10:00 — 21:00<br>土日祝 10:00 — 19:00</div>
     </div>
   </div>
-  <div class="trans-grid">
-    <div class="trans-card reveal">
-      <div class="trans-avatar">
-        <svg width="24" height="32" viewBox="0 0 24 32"><circle cx="12" cy="9" r="6"/><path d="M1 30 C1 20 5 17 12 17 C19 17 23 20 23 30" stroke-width="1"/></svg>
-      </div>
-      <div class="trans-name">Y.M さん — 34歳</div>
-      <div class="trans-period">入会3ヶ月</div>
-      <div class="trans-data">
-        <div class="trans-datum"><div class="datum-key">体重</div><div class="datum-val">− 8.2 kg</div></div>
-        <div class="trans-datum"><div class="datum-key">体脂肪率</div><div class="datum-val">− 5.3 %</div></div>
-        <div class="trans-datum"><div class="datum-key">ウエスト</div><div class="datum-val">− 9 cm</div></div>
-      </div>
-      <div class="trans-quote">「食べることを我慢しないプログラムで、初めて続けることができました。」</div>
-    </div>
-    <div class="trans-card reveal d1">
-      <div class="trans-avatar">
-        <svg width="24" height="32" viewBox="0 0 24 32"><circle cx="12" cy="9" r="6"/><path d="M1 30 C1 20 5 17 12 17 C19 17 23 20 23 30" stroke-width="1"/></svg>
-      </div>
-      <div class="trans-name">K.T さん — 42歳</div>
-      <div class="trans-period">入会2ヶ月</div>
-      <div class="trans-data">
-        <div class="trans-datum"><div class="datum-key">体重</div><div class="datum-val">− 6.5 kg</div></div>
-        <div class="trans-datum"><div class="datum-key">体脂肪率</div><div class="datum-val">− 4.1 %</div></div>
-        <div class="trans-datum"><div class="datum-key">腰痛</div><div class="datum-val">改善</div></div>
-      </div>
-      <div class="trans-quote">「40代でもこれだけ変われるとは思っていなかった。腰痛まで治ったのは驚きでした。」</div>
-    </div>
-    <div class="trans-card reveal d2">
-      <div class="trans-avatar">
-        <svg width="24" height="32" viewBox="0 0 24 32"><circle cx="12" cy="9" r="6"/><path d="M1 30 C1 20 5 17 12 17 C19 17 23 20 23 30" stroke-width="1"/></svg>
-      </div>
-      <div class="trans-name">R.S さん — 28歳</div>
-      <div class="trans-period">入会6ヶ月</div>
-      <div class="trans-data">
-        <div class="trans-datum"><div class="datum-key">体重</div><div class="datum-val">− 11 kg</div></div>
-        <div class="trans-datum"><div class="datum-key">筋肉量</div><div class="datum-val">+ 3.2 kg</div></div>
-        <div class="trans-datum"><div class="datum-key">仕事への集中力</div><div class="datum-val">向上</div></div>
-      </div>
-      <div class="trans-quote">「週2回のトレーニングが、今では生活の軸になっています。」</div>
-    </div>
+  <div class="map-area fade-up">
+    <svg width="30" height="30" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke-width=".8"/><circle cx="12" cy="10" r="3" stroke-width=".8"/></svg>
+    <p>Google Map — ここに地図が入ります</p>
   </div>
 </section>
 
-<!-- BOOKING (Step Form) -->
+<!-- ── BOOKING ────────────────────────── -->
 <section id="booking">
   <div class="booking-left">
-    <div class="section-label reveal">Free Trial</div>
-    <h2 class="booking-title reveal">まず、<br>体験してみる。</h2>
-    <p class="booking-lead reveal">カウンセリング・体組成測定・60分のトレーニング。すべて無料でご体験いただけます。その場での入会のお勧めは一切しません。</p>
-    <div class="booking-trust reveal">
-      <div class="trust-item"><div class="trust-dot"></div>完全個室・完全マンツーマン</div>
-      <div class="trust-item"><div class="trust-dot"></div>勧誘・即決プレッシャーなし</div>
-      <div class="trust-item"><div class="trust-dot"></div>体組成測定・カウンセリング込み</div>
-      <div class="trust-item"><div class="trust-dot"></div>当日キャンセルも対応</div>
+    <div class="eyebrow fade-up">Free Trial</div>
+    <h2 class="booking-title fade-up">まず、<br><i>体感してみる。</i></h2>
+    <p class="booking-lead fade-up">カウンセリング・体組成測定・60分のトレーニング、すべて無料です。その場での入会のお勧めは一切しません。</p>
+    <div class="booking-trust fade-up">
+      <div class="trust-row"><span class="trust-dot"></span>完全個室・完全マンツーマン</div>
+      <div class="trust-row"><span class="trust-dot"></span>勧誘・即決プレッシャーなし</div>
+      <div class="trust-row"><span class="trust-dot"></span>3店舗いずれかをご選択</div>
+      <div class="trust-row"><span class="trust-dot"></span>体組成測定・カウンセリング込み</div>
     </div>
   </div>
-  <div class="booking-form reveal">
-    <div class="form-progress">
-      <div class="fp done" id="fp1"></div>
-      <div class="fp" id="fp2"></div>
-      <div class="fp" id="fp3"></div>
+  <div class="booking-form fade-up">
+    <div class="form-bar">
+      <div class="fb on" id="fb1"></div>
+      <div class="fb" id="fb2"></div>
+      <div class="fb" id="fb3"></div>
     </div>
-
     <!-- Step 1 -->
-    <div class="form-step active" id="s1">
-      <div class="step-counter">01 / 03</div>
-      <div class="step-q">目標を聞かせてください</div>
-      <div class="step-options">
-        <div class="step-option" onclick="pick(this)">
-          <div class="opt-radio"></div>
-          <div><div class="opt-text">ダイエット・体型を変えたい</div><div class="opt-sub">脂肪を減らし、理想のプロポーションへ</div></div>
-        </div>
-        <div class="step-option" onclick="pick(this)">
-          <div class="opt-radio"></div>
-          <div><div class="opt-text">筋力・筋肉をつけたい</div><div class="opt-sub">強くなる、あるいは競技パフォーマンスを上げる</div></div>
-        </div>
-        <div class="step-option" onclick="pick(this)">
-          <div class="opt-radio"></div>
-          <div><div class="opt-text">健康維持・身体の不調を改善したい</div><div class="opt-sub">腰痛・肩こり・機能改善・体力回復</div></div>
-        </div>
-        <div class="step-option" onclick="pick(this)">
-          <div class="opt-radio"></div>
-          <div><div class="opt-text">特別なイベントに向けて</div><div class="opt-sub">結婚式・成人式・大会など</div></div>
-        </div>
+    <div class="fstep active" id="fs1">
+      <div class="fstep-label">01 / 03</div>
+      <div class="fstep-q">目標を<br>聞かせてください</div>
+      <div class="fopts">
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">ダイエット・体型を変えたい</div><div class="fopt-sub">脂肪を減らし、美しく変わる</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">引き締め・ボディメイク</div><div class="fopt-sub">メリハリのある美しい身体へ</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">姿勢改善・健康回復</div><div class="fopt-sub">肩こり・腰痛・産後ケア</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">特別な日に向けて</div><div class="fopt-sub">結婚式・成人式・撮影</div></div></div>
       </div>
-      <div class="form-nav"><button class="form-next" onclick="next(1)">次へ</button></div>
+      <div class="fnav"><button class="fnext" onclick="fNext(1)">次へ</button></div>
     </div>
-
     <!-- Step 2 -->
-    <div class="form-step" id="s2">
-      <div class="step-counter">02 / 03</div>
-      <div class="step-q">運動の経験は？</div>
-      <div class="step-options">
-        <div class="step-option" onclick="pick(this)">
-          <div class="opt-radio"></div>
-          <div><div class="opt-text">ほぼ経験なし</div><div class="opt-sub">初めてでも、ゼロから丁寧に設計します</div></div>
-        </div>
-        <div class="step-option" onclick="pick(this)">
-          <div class="opt-radio"></div>
-          <div><div class="opt-text">過去に少しやっていた</div><div class="opt-sub">以前の経験を活かして再スタート</div></div>
-        </div>
-        <div class="step-option" onclick="pick(this)">
-          <div class="opt-radio"></div>
-          <div><div class="opt-text">定期的に運動している</div><div class="opt-sub">現状を分析して、さらに上を目指す</div></div>
-        </div>
+    <div class="fstep" id="fs2">
+      <div class="fstep-label">02 / 03</div>
+      <div class="fstep-q">いつ頃から<br>始めたいですか？</div>
+      <div class="fopts">
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">できるだけ早く</div><div class="fopt-sub">スケジュールを優先して調整します</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">1〜2週間以内に</div><div class="fopt-sub">まず話を聞いてから決めたい</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">来月以降</div><div class="fopt-sub">じっくり検討したい</div></div></div>
       </div>
-      <div class="form-nav">
-        <button class="form-back" onclick="back(2)">戻る</button>
-        <button class="form-next" onclick="next(2)">次へ</button>
+      <div class="fnav">
+        <button class="fback" onclick="fBack(2)">戻る</button>
+        <button class="fnext" onclick="fNext(2)">次へ</button>
       </div>
     </div>
-
     <!-- Step 3 -->
-    <div class="form-step" id="s3">
-      <div class="step-counter">03 / 03</div>
-      <div class="step-q">ご連絡先を入力してください</div>
-      <div class="form-field">
-        <label class="field-label">お名前</label>
-        <input class="field-input" type="text" placeholder="山田 太郎">
-      </div>
-      <div class="form-field">
-        <label class="field-label">電話番号</label>
-        <input class="field-input" type="tel" placeholder="090 · 0000 · 0000">
-      </div>
-      <div class="form-field">
-        <label class="field-label">希望日時（任意）</label>
-        <input class="field-input" type="text" placeholder="例：週末の午前中">
-      </div>
-      <div class="form-note">送信後、24時間以内にご連絡いたします。強引な勧誘は一切ありません。</div>
-      <div class="form-nav">
-        <button class="form-back" onclick="back(3)">戻る</button>
-        <button class="form-next final" onclick="submit()">予約を確定する</button>
+    <div class="fstep" id="fs3">
+      <div class="fstep-label">03 / 03</div>
+      <div class="fstep-q">ご連絡先を<br>入力してください</div>
+      <div class="ffield"><label>お名前</label><input type="text" placeholder="山田 花子"></div>
+      <div class="ffield"><label>電話番号</label><input type="tel" placeholder="090 · 0000 · 0000"></div>
+      <div class="ffield"><label>希望店舗</label><input type="text" placeholder="志木店 / 坂戸店 / 伊勢崎店"></div>
+      <div class="fnote">送信後、24時間以内にご連絡します。強引な勧誘は一切ありません。</div>
+      <div class="fnav">
+        <button class="fback" onclick="fBack(3)">戻る</button>
+        <button class="fnext last" onclick="fSubmit()">予約を確定する</button>
       </div>
     </div>
-
-    <!-- Success -->
-    <div class="form-success" id="success">
-      <div class="success-icon">✓</div>
-      <div class="success-title">予約が完了しました</div>
-      <div class="success-body">ありがとうございます。<br>24時間以内にスタッフよりご連絡します。<br><br>変化の第一歩が、始まりました。</div>
+    <!-- Done -->
+    <div class="form-done" id="fdone">
+      <div class="done-icon">✓</div>
+      <div class="done-title">予約完了</div>
+      <div class="done-body">ありがとうございます。<br>24時間以内にスタッフよりご連絡いたします。<br><br>美しい変化の始まりを、心よりお待ちしています。</div>
     </div>
   </div>
 </section>
 
-<!-- PRICING -->
+<!-- ── PRICING ─────────────────────────── -->
 <section id="pricing">
-  <div class="section-header reveal">
-    <div>
-      <div class="section-label">Pricing</div>
-      <h2 class="section-title">料金</h2>
-    </div>
+  <div class="pricing-header">
+    <div class="eyebrow fade-up">Pricing</div>
+    <h2 class="sec-title fade-up">シンプルな<i>料金</i></h2>
   </div>
-  <div class="price-grid">
-    <div class="price-col reveal">
-      <div class="price-plan">Light</div>
+  <div class="pricing-grid">
+    <div class="price-col fade-up">
+      <div class="price-name">Starter</div>
       <div class="price-desc">週1回からはじめる。まず動く習慣をつくりたい方へ。</div>
       <div class="price-amount">¥28,000</div>
-      <div class="price-period">/ 月（月4回）</div>
-      <ul class="price-features">
-        <li class="price-feature"><span class="feature-dot"></span>マンツーマン 60分 × 4回</li>
-        <li class="price-feature"><span class="feature-dot"></span>体組成測定</li>
-        <li class="price-feature"><span class="feature-dot"></span>食事アドバイス</li>
-        <li class="price-feature"><span class="feature-dot"></span>LINEサポート</li>
+      <div class="price-per">/ 月（月4回）</div>
+      <ul class="price-items">
+        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 4回</li>
+        <li class="price-item"><span class="pi-dot"></span>体組成測定</li>
+        <li class="price-item"><span class="pi-dot"></span>食事アドバイス</li>
+        <li class="price-item"><span class="pi-dot"></span>LINEサポート</li>
       </ul>
-      <button class="price-cta" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">体験を予約する</button>
+      <button class="price-btn" onclick="go('booking')">体験を予約する</button>
     </div>
-    <div class="price-col featured reveal d1">
-      <div class="price-featured-label">Most Selected</div>
-      <div class="price-plan">Standard</div>
-      <div class="price-desc">週2回、着実に変わる。最も多くの方に選ばれているプランです。</div>
+    <div class="price-col featured fade-up d1">
+      <div class="price-badge">Most Selected</div>
+      <div class="price-name">Standard</div>
+      <div class="price-desc">最も多くの方に選ばれているプラン。週2回で着実に変わる。</div>
       <div class="price-amount">¥48,000</div>
-      <div class="price-period">/ 月（月8回）</div>
-      <ul class="price-features">
-        <li class="price-feature"><span class="feature-dot"></span>マンツーマン 60分 × 8回</li>
-        <li class="price-feature"><span class="feature-dot"></span>体組成測定・姿勢分析</li>
-        <li class="price-feature"><span class="feature-dot"></span>食事管理サポート</li>
-        <li class="price-feature"><span class="feature-dot"></span>LINEサポート（24h対応）</li>
-        <li class="price-feature"><span class="feature-dot"></span>自主トレーニング動画提供</li>
+      <div class="price-per">/ 月（月8回）</div>
+      <ul class="price-items">
+        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 8回</li>
+        <li class="price-item"><span class="pi-dot"></span>体組成測定・姿勢分析</li>
+        <li class="price-item"><span class="pi-dot"></span>食事管理サポート</li>
+        <li class="price-item"><span class="pi-dot"></span>LINEサポート（24h対応）</li>
+        <li class="price-item"><span class="pi-dot"></span>自主トレーニング動画</li>
       </ul>
-      <button class="price-cta" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">体験を予約する</button>
+      <button class="price-btn" onclick="go('booking')">体験を予約する</button>
     </div>
-    <div class="price-col reveal d2">
-      <div class="price-plan">Premium</div>
-      <div class="price-desc">週4回の集中設計。短期間で圧倒的な変化を求める方へ。</div>
-      <div class="price-amount">¥88,000</div>
-      <div class="price-period">/ 月（月16回）</div>
-      <ul class="price-features">
-        <li class="price-feature"><span class="feature-dot"></span>マンツーマン 60分 × 16回</li>
-        <li class="price-feature"><span class="feature-dot"></span>全測定・詳細分析</li>
-        <li class="price-feature"><span class="feature-dot"></span>食事メニュー設計</li>
-        <li class="price-feature"><span class="feature-dot"></span>専任トレーナー制</li>
-        <li class="price-feature"><span class="feature-dot"></span>ホームワークプログラム</li>
+    <div class="price-col fade-up d2">
+      <div class="price-name">Intensive</div>
+      <div class="price-desc">週3回の集中設計。短期間で大きく変わりたい方へ。</div>
+      <div class="price-amount">¥78,000</div>
+      <div class="price-per">/ 月（月12回）</div>
+      <ul class="price-items">
+        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 12回</li>
+        <li class="price-item"><span class="pi-dot"></span>全測定・詳細分析</li>
+        <li class="price-item"><span class="pi-dot"></span>食事メニュー設計</li>
+        <li class="price-item"><span class="pi-dot"></span>専任トレーナー制</li>
+        <li class="price-item"><span class="pi-dot"></span>ホームワークプログラム</li>
       </ul>
-      <button class="price-cta" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">体験を予約する</button>
+      <button class="price-btn" onclick="go('booking')">体験を予約する</button>
     </div>
   </div>
 </section>
 
-<!-- FAQ -->
+<!-- ── FAQ ────────────────────────────── -->
 <section id="faq">
-  <div class="section-header reveal" style="padding:0 0 0">
-    <div>
-      <div class="section-label">FAQ</div>
-      <h2 class="section-title">よくある質問</h2>
-    </div>
+  <div class="faq-left">
+    <div class="eyebrow fade-up">FAQ</div>
+    <h2 class="sec-title fade-up" style="margin-bottom:0">よくある<br><i>質問</i></h2>
+    <p class="faq-intro fade-up">体験前の不安に、正直にお答えします。ここにない質問はお電話またはLINEでどうぞ。</p>
   </div>
-  <div class="faq-layout">
-    <div class="faq-intro reveal-l">
-      体験前に気になることを、正直にお答えします。ここに答えがなければ、電話かLINEでいつでも聞いてください。
-    </div>
-    <div class="faq-list reveal">
+  <div class="faq-right">
+    <div class="faq-list fade-up">
       <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span class="faq-q">運動が全くの初心者ですが、大丈夫でしょうか？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer"><div class="faq-a-inner">問題ありません。会員の約40%が運動未経験からのスタートです。初回カウンセリングで現在の体力・生活習慣・目標を丁寧に聞いた上で、ゼロから設計します。「怖い」「何をすればいいかわからない」という方こそ、マンツーマン指導が向いています。</div></div>
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">運動が全くの初心者でも大丈夫ですか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">はい、会員の約50%が運動未経験からのスタートです。初回カウンセリングで体力・体型・生活習慣を丁寧に聞いた上で、ゼロから設計します。「怖い」「何をすればよいかわからない」という方こそ、マンツーマン指導が最適です。</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span class="faq-q">食事制限が苦手です。我慢が続かない気がします。</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer"><div class="faq-a-inner">「食べながら変わる」アプローチを基本としています。厳しいカロリー制限ではなく、食事の質・タイミング・バランスの調整を中心に行います。外食や飲み会の対応策も一緒に考えますので、我慢ではなく「選ぶ力」を育てる感覚で取り組めます。</div></div>
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">食事制限が苦手ですが続けられますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">「食べながら変わる」アプローチを基本としています。厳しい制限ではなく、食事の質・タイミング・バランスを調整します。外食やお酒も上手に取り入れながら、楽しく続けられる習慣をつくります。</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span class="faq-q">体験後に強引な勧誘はありますか？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer"><div class="faq-a-inner">一切ありません。体験後にプランのご案内はしますが、その場での決断を求めることはしません。ゆっくり検討してください。「ここで続けたい」と思えた方とのみ、ご縁をいただきたいと考えています。</div></div>
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">産後でも通えますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">はい、産後ケアを得意とするトレーナーが対応します。骨盤・コア・ホルモンバランスを考慮したプログラムを設計します。医師の許可が出ていれば、産後3ヶ月以降を目安にご相談ください。</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span class="faq-q">週1回しか来られませんが、効果は出ますか？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer"><div class="faq-a-inner">出ます。トレーニングは週数時間ですが、残りの168時間の過ごし方が変化の大半を決めます。食事・睡眠・日常動作まで一緒に見直すので、スタジオ外でも変化は進んでいます。LINEで随時サポートします。</div></div>
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">体験後に強引な勧誘はありますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">一切ありません。体験後にプランのご案内はしますが、その場での決断を求めることはしません。「ここで続けたい」と感じた方とのみ、ご縁をいただきたいと考えています。</div></div>
       </div>
       <div class="faq-item">
-        <button class="faq-trigger" onclick="toggleFaq(this)">
-          <span class="faq-q">持ち物はなにが必要ですか？</span>
-          <span class="faq-icon">+</span>
-        </button>
-        <div class="faq-answer"><div class="faq-a-inner">動きやすい服装とタオル、飲み物があれば十分です。ウェアのレンタル（無料）もご用意しています。シャワーも完備していますので、仕事帰りにそのままお越しいただけます。</div></div>
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">3店舗の違いはありますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">設備・サービス品質はすべての店舗で統一されています。お住まいや職場に近い店舗をお選びいただければ幸いです。引っ越しなど特別な事情がある場合は店舗変更もご相談ください。</div></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ACCESS -->
-<section id="access">
-  <div class="section-header reveal" style="padding:0 0 0">
-    <div>
-      <div class="section-label">Access</div>
-      <h2 class="section-title">スタジオへ</h2>
-    </div>
-  </div>
-  <div class="access-layout">
-    <div class="access-info">
-      <div class="access-row reveal">
-        <div class="access-label">Address</div>
-        <div class="access-val">〒000-0000<br>埼玉県○○市○○1-2-3<br>○○ビル 3F</div>
-      </div>
-      <div class="access-row reveal d1">
-        <div class="access-label">Hours</div>
-        <div class="access-val">平日 10:00 — 21:00<br>土日祝 10:00 — 19:00</div>
-      </div>
-      <div class="access-row reveal d2">
-        <div class="access-label">Contact</div>
-        <div class="access-val">
-          <a href="tel:000-0000-0000">000 · 0000 · 0000</a>
-        </div>
-      </div>
-      <div class="access-row reveal d3">
-        <div class="access-label">Nearest Station</div>
-        <div class="access-val">○○駅 徒歩3分</div>
-      </div>
-    </div>
-    <div class="access-map reveal-r">
-      <!-- ↓ Google Map がここに入ります -->
-      <svg width="36" height="36" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke-width="1"/><circle cx="12" cy="10" r="3" stroke-width="1"/></svg>
-      <p>Map — ここに地図が入ります</p>
-    </div>
-  </div>
-</section>
-
-<!-- FINALE -->
+<!-- ── FINALE ──────────────────────────── -->
 <section id="finale">
-  <div class="finale-bg"></div>
-  <div class="finale-content reveal">
+  <div class="finale-glow"></div>
+  <div class="finale-inner fade-up">
     <div class="finale-eyebrow">Free Trial</div>
-    <h2 class="finale-h">まず、<br><span class="accent">動いてみる。</span></h2>
-    <p class="finale-sub">体験セッションは無料です。カウンセリングと60分のトレーニングで、身体の現在地を知ることから始めましょう。</p>
+    <h2 class="finale-h">まず、<br><i>動いてみる。</i></h2>
+    <p class="finale-sub">体験セッションは完全無料です。カウンセリングと60分のトレーニングで、身体の現在地を知ることから始めましょう。</p>
     <div class="finale-actions">
-      <button class="btn-primary" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">
+      <button class="btn-fill" onclick="go('booking')">
         無料体験を予約する
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
       </button>
-      <a href="tel:000-0000-0000" class="btn-secondary">電話で問い合わせる</a>
+      <a href="tel:000-0000-0000" class="btn-line">電話で問い合わせる</a>
     </div>
   </div>
 </section>
 
-<!-- FOOTER -->
+<!-- ── FOOTER ──────────────────────────── -->
 <footer>
-  <div class="footer-logo">ZERO<span> FITNESS</span></div>
-  <div class="footer-copy">© 2025 Zero Fitness & Personal. All rights reserved.</div>
+  <div class="footer-logo">BI<em>BODY</em>FIT</div>
+  <div class="footer-copy">© 2025 BIBODYFIT. All rights reserved.</div>
 </footer>
 
-<!-- STICKY BAR -->
+<!-- ── STICKY ──────────────────────────── -->
 <div id="sticky">
-  <div class="sticky-text">
-    <div class="sticky-title">無料体験セッション</div>
-    <div class="sticky-sub">カウンセリング + 60分 — 完全無料</div>
+  <div class="sticky-label">
+    <div class="st-main">無料体験を申し込む</div>
+    <div class="st-sub">カウンセリング + 60分 — 完全無料</div>
   </div>
-  <button class="sticky-btn" onclick="document.getElementById('booking').scrollIntoView({behavior:'smooth'})">予約する</button>
+  <button class="sticky-btn" onclick="go('booking')">予約する</button>
 </div>
 
 <script>
-/* ── Cursor ── */
-const cur = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-if(cur){
-  let mx=0,my=0,rx=0,ry=0;
-  document.addEventListener('mousemove',e=>{
-    mx=e.clientX; my=e.clientY;
-    cur.style.left=mx+'px'; cur.style.top=my+'px';
-  });
-  setInterval(()=>{
-    rx+=(mx-rx)*.12; ry+=(my-ry)*.12;
-    ring.style.left=rx+'px'; ring.style.top=ry+'px';
-  },16);
-  document.querySelectorAll('button,a,.prog-row,.step-option,.faq-trigger').forEach(el=>{
-    el.addEventListener('mouseenter',()=>{cur.style.width='20px';cur.style.height='20px';});
-    el.addEventListener('mouseleave',()=>{cur.style.width='8px';cur.style.height='8px';});
-  });
-}
+/* helpers */
+function go(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
 
-/* ── Nav ── */
+/* nav */
 const nav = document.getElementById('nav');
-window.addEventListener('scroll',()=>{
-  nav.classList.toggle('scrolled', scrollY > 60);
-  document.getElementById('sticky').classList.toggle('show', scrollY > window.innerHeight * .6);
-},{passive:true});
+const sticky = document.getElementById('sticky');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('filled', scrollY > 60);
+  sticky.classList.toggle('show', scrollY > window.innerHeight * .55);
+}, {passive:true});
 
-/* ── Reveal on scroll ── */
-const ro = new IntersectionObserver(entries=>{
-  entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); }});
-},{threshold:.08});
-document.querySelectorAll('.reveal,.reveal-l,.reveal-r').forEach(el=>ro.observe(el));
+/* reveal */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); }});
+}, {threshold: .08});
+document.querySelectorAll('.fade-up,.fade-l,.fade-r').forEach(el => ro.observe(el));
 
-/* ── Counters ── */
+/* counters */
 function animCount(el){
-  const target=+el.dataset.target, suf=el.dataset.suffix||'';
-  const span=el.querySelector('span'); if(!span)return;
-  const dur=1800,step=16,inc=target/(dur/step);
-  let c=0;
-  const t=setInterval(()=>{
-    c=Math.min(c+inc,target);
-    span.textContent=Math.floor(c)+suf;
-    if(c>=target)clearInterval(t);
-  },step);
+  const target = +el.dataset.target, suf = el.dataset.suffix || '';
+  const sp = el.querySelector('span'); if(!sp) return;
+  let c = 0; const inc = target / 90;
+  const t = setInterval(() => {
+    c = Math.min(c + inc, target);
+    sp.textContent = Math.floor(c) + suf;
+    if(c >= target) clearInterval(t);
+  }, 16);
 }
-new IntersectionObserver(entries=>{
-  entries.forEach(e=>{
-    if(e.isIntersecting){
-      e.target.querySelectorAll('[data-target]').forEach(animCount);
-      cntObs.unobserve(e.target);
-    }
-  });
-},{threshold:.3}).observe(document.getElementById('metrics'));
-const cntObs={unobserve:()=>{}};
+const numObs = new IntersectionObserver(es => {
+  es.forEach(e => { if(e.isIntersecting){ e.target.querySelectorAll('[data-target]').forEach(animCount); numObs.unobserve(e.target); }});
+}, {threshold:.3});
+const numsEl = document.getElementById('numbers');
+if(numsEl) numObs.observe(numsEl);
 
-/* ── FAQ ── */
-function toggleFaq(btn){
-  const item=btn.closest('.faq-item');
-  const open=item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));
-  if(!open) item.classList.add('open');
+/* faq */
+function tFaq(btn){
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
 }
 
-/* ── Step Form ── */
-let step=1;
-function pick(el){
-  el.closest('.step-options').querySelectorAll('.step-option').forEach(o=>o.classList.remove('chosen'));
-  el.classList.add('chosen');
-}
-function updateBar(){
-  [1,2,3].forEach(i=>document.getElementById('fp'+i).classList.toggle('done',i<=step));
-}
-function next(from){
-  if(from<3){
-    document.getElementById('s'+from).classList.remove('active');
-    step=from+1;
-    document.getElementById('s'+step).classList.add('active');
+/* form */
+let step = 1;
+function pick(el){ el.closest('.fopts').querySelectorAll('.fopt').forEach(o=>o.classList.remove('sel')); el.classList.add('sel'); }
+function updateBar(){ [1,2,3].forEach(i => document.getElementById('fb'+i).classList.toggle('on', i <= step)); }
+function fNext(from){
+  if(from < 3){
+    document.getElementById('fs'+from).classList.remove('active');
+    step = from + 1;
+    document.getElementById('fs'+step).classList.add('active');
     updateBar();
   }
 }
-function back(from){
-  if(from>1){
-    document.getElementById('s'+from).classList.remove('active');
-    step=from-1;
-    document.getElementById('s'+step).classList.add('active');
+function fBack(from){
+  if(from > 1){
+    document.getElementById('fs'+from).classList.remove('active');
+    step = from - 1;
+    document.getElementById('fs'+step).classList.add('active');
     updateBar();
   }
 }
-function submit(){
-  document.getElementById('s3').classList.remove('active');
-  document.getElementById('success').classList.add('show');
-  [1,2,3].forEach(i=>document.getElementById('fp'+i).classList.add('done'));
+function fSubmit(){
+  document.getElementById('fs3').classList.remove('active');
+  document.getElementById('fdone').classList.add('show');
+  [1,2,3].forEach(i => document.getElementById('fb'+i).classList.add('on'));
 }
 </script>
 </body>
