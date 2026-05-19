@@ -1,0 +1,1560 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BIBODYFIT — Personal Training Studio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Outfit:wght@200;300;400;500&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet">
+<style>
+
+/* ── RESET & TOKENS ─────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; overflow-x: hidden; font-size: 16px; }
+body {
+  background: #080c18;
+  color: #f0f4ff;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+a { text-decoration: none; color: inherit; }
+button { font-family: inherit; cursor: pointer; }
+img { display: block; max-width: 100%; }
+
+:root {
+  /* palette */
+  --bg:        #080c18;
+  --bg1:       #0d1225;
+  --bg2:       #121832;
+  --bg3:       #181f3d;
+  --blue:      #5585ff;
+  --blue-dim:  rgba(85,133,255,.18);
+  --blue-line: rgba(85,133,255,.32);
+  --white:     #f0f4ff;
+  --mid:       rgba(240,244,255,.82);
+  --low:       rgba(240,244,255,.55);
+  --lower:     rgba(240,244,255,.30);
+  --rule:      rgba(240,244,255,.12);
+  /* type */
+  --disp: 'DM Serif Display', Georgia, serif;
+  --sans: 'Outfit', sans-serif;
+  --jp:   'Noto Sans JP', sans-serif;
+  /* motion */
+  --ease: cubic-bezier(.25,1,.5,1);
+}
+
+/* ── GRAIN ───────────────────────────── */
+body::after {
+  content: '';
+  position: fixed; inset: 0; z-index: 9000;
+  pointer-events: none;
+  opacity: .04;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px;
+}
+
+/* ── NAV ─────────────────────────────── */
+#nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 68px; padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  transition: background .5s var(--ease), border-color .5s;
+  border-bottom: 1px solid transparent;
+}
+#nav.filled {
+  background: rgba(8,12,24,.92);
+  border-color: var(--rule);
+  backdrop-filter: blur(24px) saturate(1.4);
+}
+.logo {
+  font-family: var(--disp);
+  font-size: 20px; letter-spacing: .08em; font-style: italic;
+  color: var(--white);
+}
+.logo em { color: var(--blue); font-style: normal; }
+
+.nav-mid { display: flex; gap: 36px; }
+.nav-a {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 300;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--low); transition: color .25s;
+}
+.nav-a:hover { color: var(--white); }
+
+.nav-cta {
+  font-family: var(--sans);
+  font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--white);
+  background: var(--blue);
+  border: none; padding: 11px 24px;
+  transition: opacity .25s;
+}
+.nav-cta:hover { opacity: .85; }
+
+/* ── HERO ─────────────────────────────── */
+#hero {
+  position: relative;
+  height: 100dvh; min-height: 640px;
+  display: flex; align-items: flex-end;
+  overflow: hidden;
+}
+
+/* Full-bleed photo */
+.hero-photo {
+  position: absolute; inset: 0; z-index: 0;
+}
+.hero-photo img {
+  width: 100%; height: 100%;
+  object-fit: cover; object-position: center 30%;
+  display: block;
+}
+/* Fallback gradient when no image */
+.hero-photo-fallback {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 60% 80% at 65% 30%, rgba(68,117,242,.18) 0%, transparent 65%),
+    linear-gradient(160deg, #070a12 0%, #0d1428 50%, #070a12 100%);
+}
+
+/* Cinematic overlay — darker at bottom for text legibility */
+.hero-overlay {
+  position: absolute; inset: 0; z-index: 1;
+  background:
+    linear-gradient(to top,
+      rgba(8,12,24,1)    0%,
+      rgba(8,12,24,.8)   30%,
+      rgba(8,12,24,.4)   60%,
+      rgba(8,12,24,.18)  100%),
+    linear-gradient(to right,
+      rgba(8,12,24,.65)  0%,
+      rgba(8,12,24,.12)  50%,
+      rgba(8,12,24,.0)   100%);
+}
+
+/* Content */
+.hero-content {
+  position: relative; z-index: 2;
+  padding: 0 56px 88px;
+  max-width: 720px;
+}
+.hero-label {
+  font-family: var(--sans);
+  font-size: 10px; font-weight: 300;
+  letter-spacing: .22em; text-transform: uppercase;
+  color: var(--blue);
+  display: flex; align-items: center; gap: 14px;
+  margin-bottom: 32px;
+  opacity: 0; animation: fadeUp .7s .15s var(--ease) forwards;
+}
+.hero-label::before {
+  content: ''; width: 32px; height: 1px;
+  background: var(--blue); display: block;
+}
+
+.hero-h {
+  font-family: var(--disp);
+  font-size: clamp(64px, 11vw, 120px);
+  line-height: 1.05; letter-spacing: .01em;
+  margin-bottom: 32px;
+  font-style: italic;
+}
+.hero-h-row { display: block; overflow: visible; padding-top: 4px; }
+.hero-h-inner {
+  display: block;
+  opacity: 0; transform: translateY(32px);
+  animation: slideUp .85s var(--ease) forwards;
+}
+.hero-h-row:nth-child(1) .hero-h-inner { animation-delay: .3s; }
+.hero-h-row:nth-child(2) .hero-h-inner { animation-delay: .44s; color: var(--blue); }
+.hero-h-row:nth-child(3) .hero-h-inner { animation-delay: .58s; }
+
+.hero-sub {
+  font-family: var(--jp);
+  font-size: 13px; line-height: 2.3;
+  color: var(--mid); max-width: 360px; margin-bottom: 48px;
+  opacity: 0; animation: fadeUp .7s .75s var(--ease) forwards;
+}
+
+.hero-actions {
+  display: flex; gap: 14px;
+  opacity: 0; animation: fadeUp .7s .9s var(--ease) forwards;
+}
+.btn-fill {
+  display: inline-flex; align-items: center; gap: 10px;
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--white); background: var(--blue);
+  border: none; padding: 16px 28px;
+  transition: opacity .25s, gap .3s var(--ease);
+}
+.btn-fill:hover { opacity: .85; gap: 16px; }
+.btn-fill svg { width: 14px; stroke: currentColor; fill: none; stroke-width: 2; transition: transform .3s var(--ease); }
+.btn-fill:hover svg { transform: translateX(3px); }
+
+.btn-line {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--sans); font-size: 11px; font-weight: 300;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--low); background: none;
+  border: 1px solid var(--rule); padding: 15px 24px;
+  transition: color .25s, border-color .25s;
+}
+.btn-line:hover { color: var(--white); border-color: var(--lower); }
+
+/* Scroll line */
+.hero-scroll {
+  position: absolute; bottom: 32px; right: 48px; z-index: 2;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  opacity: 0; animation: fadeUp .6s 1.2s var(--ease) forwards;
+}
+.scroll-bar { width: 1px; height: 52px; background: var(--rule); overflow: hidden; position: relative; }
+.scroll-bar::after {
+  content: ''; position: absolute; top: -100%;
+  left: 0; right: 0; height: 100%;
+  background: var(--blue);
+  animation: scrollDrop 2s ease-in-out infinite;
+}
+@keyframes scrollDrop { 0%{top:-100%} 100%{top:100%} }
+.scroll-text {
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--lower);
+  writing-mode: vertical-rl;
+}
+
+/* ── TICKER ──────────────────────────── */
+.ticker-wrap {
+  overflow: hidden;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+  background: var(--bg1);
+  padding: 0;
+}
+.ticker-track {
+  display: flex;
+  animation: ticker 28s linear infinite;
+  white-space: nowrap;
+}
+.ticker-item {
+  flex-shrink: 0;
+  padding: 17px 44px;
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .18em; text-transform: uppercase;
+  color: var(--low);
+  border-right: 1px solid var(--rule);
+}
+.ticker-item.accent { color: var(--blue); }
+@keyframes ticker { 0%{transform:translateX(0)} 100%{transform:translateX(-50%)} }
+
+/* ── NUMBERS ─────────────────────────── */
+#numbers {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  border-bottom: 1px solid var(--rule);
+}
+.num-cell {
+  padding: 52px 40px;
+  border-right: 1px solid var(--rule);
+  position: relative;
+  transition: background .4s;
+}
+.num-cell:hover { background: var(--blue-dim); }
+.num-cell:last-child { border-right: none; }
+.num-cell::after {
+  content: '';
+  position: absolute; bottom: 0; left: 40px; right: 40px; height: 1px;
+  background: var(--blue);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .5s var(--ease);
+}
+.num-cell:hover::after { transform: scaleX(1); }
+.num-n {
+  font-family: var(--disp);
+  font-size: clamp(52px,5.5vw,72px); line-height: 1;
+  color: var(--white); margin-bottom: 10px; font-style: italic;
+}
+.num-en {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--blue);
+  margin-bottom: 4px;
+}
+.num-jp { font-size: 12px; color: var(--low); }
+
+/* ── SECTIONS BASE ───────────────────── */
+.sec { padding: 120px 48px; }
+.eyebrow {
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
+  display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+}
+.eyebrow::before { content: ''; width: 22px; height: 1px; background: var(--blue); }
+.sec-title {
+  font-family: var(--disp);
+  font-size: clamp(44px, 5.5vw, 68px);
+  line-height: 1.05; letter-spacing: .01em; color: var(--white);
+  font-style: italic;
+}
+.sec-title i { color: var(--blue); font-style: normal; }
+
+/* ── CONCEPT ─────────────────────────── */
+#concept {
+  display: grid; grid-template-columns: 5fr 4fr; gap: 0;
+  border-top: 1px solid var(--rule);
+}
+.concept-left {
+  padding: 96px 48px; border-right: 1px solid var(--rule);
+}
+.concept-lead {
+  font-size: 14px; line-height: 2.6; color: var(--mid);
+  max-width: 460px; margin: 32px 0 56px;
+}
+.concept-lead p + p { margin-top: 20px; }
+.pillars { border-top: 1px solid var(--rule); }
+.pillar {
+  display: flex; gap: 24px; align-items: flex-start;
+  padding: 28px 0; border-bottom: 1px solid var(--rule);
+  transition: background .3s;
+}
+.pillar-n {
+  font-family: var(--disp); font-size: 40px; font-style: italic;
+  color: var(--blue-dim); line-height: 1; width: 52px; flex-shrink: 0;
+  transition: color .35s;
+}
+.pillar:hover .pillar-n { color: rgba(68,117,242,.45); }
+.pillar-body h4 {
+  font-family: var(--sans); font-size: 11px; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--white); margin-bottom: 7px;
+}
+.pillar-body p { font-size: 12px; color: var(--mid); line-height: 2; }
+
+.concept-right {
+  padding: 96px 48px; background: var(--bg1);
+  display: flex; flex-direction: column; gap: 32px;
+}
+/* Photo placeholder */
+.concept-photo {
+  flex: 1; background: var(--bg2);
+  border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; overflow: hidden; min-height: 280px;
+}
+.concept-photo-label {
+  display: flex; flex-direction: column; align-items: center; gap: 10px; opacity: .2;
+}
+.concept-photo-label svg { stroke: var(--blue); fill: none; stroke-width: .8; }
+.concept-photo-label span {
+  font-family: var(--sans); font-size: 8px;
+  letter-spacing: .18em; text-transform: uppercase; color: var(--blue);
+  text-align: center;
+}
+/* Data */
+.concept-data { display: flex; flex-direction: column; }
+.data-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 14px 0; border-bottom: 1px solid var(--rule);
+}
+.data-row:last-child { border-bottom: none; }
+.data-k { font-size: 12px; color: var(--low); }
+.data-v {
+  font-family: var(--disp); font-size: 28px;
+  color: var(--blue); letter-spacing: .02em;
+}
+
+/* ── TRAINER ─────────────────────────── */
+#trainer { border-top: 1px solid var(--rule); }
+.trainer-header { padding: 80px 48px 0; }
+.trainer-grid {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 0;
+}
+.trainer-card {
+  background: var(--bg1);
+  display: grid; grid-template-columns: 220px 1fr;
+}
+.trainer-photo {
+  background: var(--bg2); position: relative;
+  overflow: hidden; min-height: 380px; width: 220px;
+  display: flex; align-items: center; justify-content: center;
+}
+.trainer-photo::before {
+  content: ''; position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(to right, var(--blue), rgba(85,133,255,0));
+}
+.trainer-photo-hint {
+  display: flex; flex-direction: column; align-items: center;
+  gap: 10px; opacity: .2;
+}
+.trainer-photo-hint svg { stroke: var(--blue); fill: none; stroke-width: .8; }
+.trainer-photo-hint span {
+  font-family: var(--sans); font-size: 9px;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
+}
+.trainer-caption {
+  position: absolute; bottom: 0; left: 0; right: 0;
+  padding: 36px 16px 18px;
+  background: linear-gradient(transparent, rgba(8,12,24,.97));
+}
+.trainer-name {
+  font-family: var(--disp); font-size: 28px; line-height: 1.1; font-style: italic;
+  margin-bottom: 5px; white-space: nowrap;
+}
+.trainer-role {
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--blue);
+  white-space: nowrap;
+}
+.trainer-body {
+  padding: 40px 36px;
+  background: var(--bg1);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.trainer-quote {
+  font-family: var(--disp); font-size: clamp(13px,1.4vw,17px);
+  font-weight: 400; font-style: italic; line-height: 1.75;
+  color: var(--white);
+  border-left: 2px solid var(--blue); padding-left: 18px;
+  margin-bottom: 24px;
+}
+.trainer-text {
+  font-size: 12px; line-height: 2.3; color: var(--mid);
+  margin-bottom: 24px;
+}
+.trainer-text p + p { margin-top: 12px; }
+.trainer-creds {
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule);
+}
+.cred { background: var(--bg2); padding: 13px 15px; }
+.cred-l {
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 4px;
+}
+.cred-v {
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  color: var(--white); line-height: 1.4;
+}
+
+/* ── RESULTS ─────────────────────────── */
+#results { border-top: 1px solid var(--rule); }
+.results-header { padding: 80px 48px 0; }
+.results-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 0;
+}
+.result-card {
+  background: var(--bg1); padding: 40px 32px;
+  position: relative; overflow: hidden; transition: background .35s;
+}
+.result-card:hover { background: var(--bg2); }
+.result-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(to right, var(--blue), transparent);
+  transform: scaleX(0); transform-origin: left;
+  transition: transform .5s var(--ease);
+}
+.result-card:hover::before { transform: scaleX(1); }
+
+.rc-avatar {
+  width: 48px; height: 48px; border-radius: 50%;
+  background: var(--bg3); border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 20px;
+}
+.rc-avatar svg { stroke: var(--low); fill: none; stroke-width: 1; }
+.rc-name { font-family: var(--sans); font-size: 12px; font-weight: 400; color: var(--white); margin-bottom: 2px; }
+.rc-meta { font-family: var(--sans); font-size: 9px; font-weight: 300; letter-spacing: .1em; text-transform: uppercase; color: var(--blue); margin-bottom: 20px; }
+.rc-data { border: 1px solid var(--rule); margin-bottom: 18px; }
+.rc-datum { display: flex; justify-content: space-between; align-items: baseline; padding: 9px 12px; border-bottom: 1px solid var(--rule); }
+.rc-datum:last-child { border-bottom: none; }
+.rd-k { font-size: 11px; color: var(--low); }
+.rd-v { font-family: var(--disp); font-size: 20px; letter-spacing: .02em; color: var(--blue); }
+.rc-quote { font-size: 12px; line-height: 2.1; color: var(--low); font-style: italic; }
+
+/* ── PROGRAMS ────────────────────────── */
+#programs {
+  border-top: 1px solid var(--rule);
+}
+.programs-header { padding: 80px 48px 0; }
+.programs-list {
+  margin-top: 40px;
+  border-top: 1px solid var(--rule);
+}
+.prog {
+  display: grid; grid-template-columns: 60px 1fr auto;
+  align-items: center; gap: 40px;
+  padding: 40px 48px; border-bottom: 1px solid var(--rule);
+  cursor: pointer; position: relative; overflow: hidden;
+  transition: background .35s;
+}
+.prog::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 0;
+  background: var(--blue-dim);
+  transition: width .45s var(--ease);
+}
+.prog:hover::before { width: 100%; }
+.prog:hover { background: transparent; }
+.prog-num {
+  font-family: var(--disp); font-size: 40px; font-style: italic;
+  color: rgba(68,117,242,.18); line-height: 1;
+  position: relative; z-index: 1;
+  transition: color .3s;
+}
+.prog:hover .prog-num { color: rgba(68,117,242,.5); }
+.prog-body { position: relative; z-index: 1; }
+.prog-name {
+  font-family: var(--sans); font-size: 17px; font-weight: 400;
+  letter-spacing: .04em; color: var(--white); margin-bottom: 6px;
+  text-transform: uppercase;
+}
+.prog-desc { font-size: 12px; color: var(--mid); line-height: 1.8; }
+.prog-tags { display: flex; gap: 6px; margin-top: 9px; flex-wrap: wrap; }
+.prog-tag {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--blue); border: 1px solid var(--blue-line); padding: 3px 8px;
+}
+.prog-arrow {
+  width: 40px; height: 40px; border-radius: 50%;
+  border: 1px solid var(--rule); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 1;
+  transition: border-color .3s, background .3s;
+}
+.prog:hover .prog-arrow { border-color: var(--blue); background: var(--blue); }
+.prog-arrow svg { stroke: var(--low); fill: none; stroke-width: 1.5; transition: stroke .3s, transform .3s var(--ease); }
+.prog:hover .prog-arrow svg { stroke: #fff; transform: translateX(2px); }
+
+/* ── LOCATIONS ───────────────────────── */
+#locations { border-top: 1px solid var(--rule); }
+.locations-header { padding: 80px 48px 0; }
+.locations-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 0;
+}
+.loc {
+  background: var(--bg1); padding: 40px 32px;
+  position: relative; overflow: hidden; transition: background .35s;
+}
+.loc:hover { background: var(--bg2); }
+.loc::after {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0; width: 2px;
+  background: var(--blue);
+  transform: scaleY(0); transform-origin: top;
+  transition: transform .4s var(--ease);
+}
+.loc:hover::after { transform: scaleY(1); }
+.loc-num {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 12px;
+}
+.loc-name {
+  font-family: var(--disp); font-size: 32px; letter-spacing: .01em; font-style: italic;
+  color: var(--white); margin-bottom: 20px;
+}
+.loc-info { font-size: 12px; line-height: 2.2; color: var(--mid); }
+.loc-info a { color: var(--blue); }
+
+.map-area {
+  margin: 0 48px;
+  background: var(--bg1); border: 1px solid var(--rule);
+  border-top: none;
+  aspect-ratio: 21/5;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+}
+.map-area svg { stroke: rgba(68,117,242,.25); fill: none; }
+.map-area p {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--lower);
+}
+
+.loc-sns {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 16px;
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--blue); border: 1px solid var(--blue-line);
+  padding: 6px 12px; transition: background .25s, color .25s;
+}
+.loc-sns:hover { background: var(--blue); color: #fff; }
+.loc-sns svg { flex-shrink: 0; }
+
+/* ── BOOKING ─────────────────────────── */
+#booking {
+  border-top: 1px solid var(--rule);
+  display: grid; grid-template-columns: 1fr 1fr;
+}
+.booking-left { padding: 96px 48px; border-right: 1px solid var(--rule); }
+.booking-title {
+  font-family: var(--disp);
+  font-size: clamp(44px,5.5vw,68px); line-height: 1.05; font-style: italic;
+  letter-spacing: .01em; color: var(--white); margin-bottom: 28px;
+}
+.booking-title i { color: var(--blue); font-style: normal; }
+.booking-lead { font-size: 13px; line-height: 2.5; color: var(--mid); margin-bottom: 48px; }
+.booking-trust { display: flex; flex-direction: column; gap: 14px; }
+.trust-row { display: flex; align-items: center; gap: 14px; font-size: 12px; color: var(--mid); }
+.trust-dot { width: 4px; height: 4px; border-radius: 50%; background: var(--blue); flex-shrink: 0; }
+
+/* Form */
+.booking-form { padding: 64px 48px; background: var(--bg1); }
+.form-bar { display: flex; gap: 3px; margin-bottom: 36px; }
+.fb { height: 2px; flex: 1; background: var(--rule); transition: background .4s; }
+.fb.on { background: var(--blue); }
+.fstep { display: none; animation: fadeUp .4s var(--ease); }
+.fstep.active { display: block; }
+.fstep-label {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
+  margin-bottom: 12px;
+}
+.fstep-q {
+  font-family: var(--disp); font-size: 30px; font-style: italic;
+  letter-spacing: .01em;
+  color: var(--white); margin-bottom: 28px; line-height: 1.15;
+}
+.fopts { display: flex; flex-direction: column; gap: 6px; }
+.fopt {
+  display: flex; align-items: center; gap: 14px;
+  padding: 14px 16px; border: 1px solid var(--rule);
+  cursor: pointer; transition: border-color .25s, background .25s;
+}
+.fopt:hover { border-color: var(--blue-line); background: var(--blue-dim); }
+.fopt.sel { border-color: var(--blue); background: var(--blue-dim); }
+.fopt input { display: none; }
+.fopt-radio {
+  width: 16px; height: 16px; border-radius: 50%;
+  border: 1.5px solid var(--low); flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color .2s;
+}
+.fopt.sel .fopt-radio { border-color: var(--blue); }
+.fopt-radio::after {
+  content: ''; width: 8px; height: 8px; border-radius: 50%;
+  background: var(--blue); transform: scale(0); transition: transform .2s var(--ease);
+}
+.fopt.sel .fopt-radio::after { transform: scale(1); }
+.fopt-main { font-size: 13px; font-weight: 300; color: var(--white); }
+.fopt-sub { font-size: 11px; color: var(--low); margin-top: 2px; }
+
+.ffield { display: flex; flex-direction: column; gap: 6px; margin-bottom: 16px; }
+.ffield label {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .16em; text-transform: uppercase; color: var(--low);
+}
+.ffield input {
+  background: transparent; border: none;
+  border-bottom: 1px solid var(--rule);
+  color: var(--white); padding: 11px 0;
+  font-size: 14px; font-weight: 300;
+  font-family: var(--jp); outline: none; width: 100%;
+  transition: border-color .3s;
+}
+.ffield input::placeholder { color: var(--lower); }
+.ffield input:focus { border-color: var(--blue); }
+.fnote { font-size: 11px; color: var(--lower); line-height: 1.9; margin-top: 12px; }
+.fnav { display: flex; gap: 8px; margin-top: 28px; }
+.fnext {
+  flex: 1; background: var(--blue); color: #fff;
+  border: none; padding: 15px;
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  transition: opacity .25s;
+}
+.fnext:hover { opacity: .85; }
+.fnext.last { background: var(--white); color: var(--bg); }
+.fnext.last:hover { background: var(--blue); color: #fff; opacity: 1; }
+.fback {
+  background: none; color: var(--low); border: 1px solid var(--rule);
+  padding: 15px 18px;
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .1em; text-transform: uppercase;
+  transition: color .25s, border-color .25s;
+}
+.fback:hover { color: var(--white); border-color: var(--lower); }
+.form-done { display: none; text-align: center; padding: 16px 0; }
+.form-done.show { display: block; }
+.done-icon {
+  font-family: var(--disp); font-size: 64px; color: var(--blue);
+  line-height: 1; margin-bottom: 14px; font-style: italic;
+}
+.done-title {
+  font-family: var(--disp); font-size: 38px; color: var(--white);
+  margin-bottom: 12px; font-style: italic;
+}
+.done-body { font-size: 12px; line-height: 2.2; color: var(--mid); }
+
+/* ── PRICING ─────────────────────────── */
+#pricing { border-top: 1px solid var(--rule); }
+.pricing-header { padding: 80px 48px 0; }
+.pricing-grid {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 120px;
+}
+.price-col {
+  background: var(--bg1); padding: 48px 36px;
+  display: flex; flex-direction: column; transition: background .35s;
+}
+.price-col:hover { background: var(--bg2); }
+.price-col.featured {
+  background: var(--bg2);
+  border-top: 2px solid var(--blue);
+}
+.price-badge {
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .2em; text-transform: uppercase; color: var(--blue);
+  margin-bottom: 16px;
+}
+.price-name {
+  font-family: var(--sans); font-size: 13px; font-weight: 400;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--white); margin-bottom: 8px;
+}
+.price-desc { font-size: 12px; line-height: 1.9; color: var(--mid); margin-bottom: 28px; min-height: 48px; }
+.price-amount {
+  font-family: var(--disp); font-size: 56px; line-height: 1; font-style: italic;
+  color: var(--white); margin-bottom: 4px;
+}
+.price-per {
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .1em; color: var(--low);
+  margin-bottom: 28px; padding-bottom: 28px; border-bottom: 1px solid var(--rule);
+}
+.price-items { list-style: none; flex: 1; display: flex; flex-direction: column; gap: 11px; margin-bottom: 32px; }
+.price-item { display: flex; align-items: flex-start; gap: 10px; font-size: 12px; color: var(--mid); line-height: 1.7; }
+.pi-dot { width: 3px; height: 3px; border-radius: 50%; background: var(--blue); flex-shrink: 0; margin-top: 8px; }
+.price-btn {
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--sans); font-size: 10px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  padding: 13px 20px; border: 1px solid var(--rule);
+  color: var(--low); background: none;
+  transition: border-color .25s, color .25s;
+}
+.price-btn:hover { border-color: var(--blue); color: var(--blue); }
+.price-col.featured .price-btn { background: var(--blue); color: #fff; border-color: var(--blue); }
+.price-col.featured .price-btn:hover { opacity: .85; }
+
+.pricing-note {
+  font-size: 13px; line-height: 2; color: var(--mid);
+  padding: 0 48px 32px; margin-top: 24px;
+}
+.pricing-note strong { color: var(--blue); font-weight: 400; }
+.price-tax {
+  display: block; font-size: 10px; color: var(--lower);
+  margin-top: 2px; letter-spacing: 0;
+}
+.price-per-session {
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  color: var(--blue); letter-spacing: .05em;
+  margin-bottom: 20px; margin-top: -16px;
+}
+
+/* ── FAQ ─────────────────────────────── */
+#faq {
+  border-top: 1px solid var(--rule);
+  display: grid; grid-template-columns: 1fr 2fr; gap: 0;
+}
+.faq-left {
+  padding: 96px 48px; border-right: 1px solid var(--rule);
+  display: flex; flex-direction: column; gap: 24px;
+}
+.faq-intro { font-size: 13px; line-height: 2.5; color: var(--mid); }
+.faq-right { padding: 96px 48px; }
+.faq-list { display: flex; flex-direction: column; }
+.faq-item { border-bottom: 1px solid var(--rule); }
+.faq-q-btn {
+  width: 100%; display: flex; justify-content: space-between; align-items: center;
+  padding: 26px 0; background: none; border: none; color: var(--white);
+  cursor: pointer; text-align: left; gap: 24px; transition: color .25s;
+}
+.faq-q-btn:hover { color: var(--blue); }
+.faq-q-text { font-size: 13px; font-weight: 400; font-family: var(--jp); flex: 1; }
+.faq-icon {
+  width: 22px; height: 22px; border-radius: 50%;
+  border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px; color: var(--low); font-family: var(--sans); font-weight: 200;
+  flex-shrink: 0; transition: all .3s var(--ease);
+}
+.faq-item.open .faq-icon { border-color: var(--blue); color: var(--blue); transform: rotate(45deg); }
+.faq-ans { max-height: 0; overflow: hidden; transition: max-height .5s var(--ease); }
+.faq-item.open .faq-ans { max-height: 300px; }
+.faq-ans-inner { font-size: 12px; line-height: 2.5; color: var(--mid); padding-bottom: 26px; }
+
+/* ── FINALE ──────────────────────────── */
+#finale {
+  border-top: 1px solid var(--rule);
+  padding: 160px 48px; text-align: center;
+  position: relative; overflow: hidden;
+}
+.finale-glow {
+  position: absolute; inset: 0; pointer-events: none;
+  background: radial-gradient(ellipse 60% 60% at 50% 60%, rgba(85,133,255,.18) 0%, transparent 65%);
+}
+.finale-inner { position: relative; z-index: 1; }
+.finale-eyebrow {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .22em; text-transform: uppercase; color: var(--blue);
+  display: flex; align-items: center; justify-content: center; gap: 16px;
+  margin-bottom: 36px;
+}
+.finale-eyebrow::before, .finale-eyebrow::after {
+  content: ''; display: block; width: 40px; height: 1px; background: var(--blue);
+}
+.finale-h {
+  font-family: var(--disp);
+  font-size: clamp(60px,8.5vw,110px); line-height: 1.0; font-style: italic;
+  letter-spacing: .01em; color: var(--white); margin-bottom: 24px;
+}
+.finale-h i { color: var(--blue); font-style: normal; }
+.finale-sub {
+  font-size: 13px; line-height: 2.5; color: var(--mid);
+  max-width: 360px; margin: 0 auto 56px;
+}
+.finale-actions { display: flex; gap: 14px; justify-content: center; }
+
+/* ── FOOTER ──────────────────────────── */
+footer {
+  border-top: 1px solid var(--rule); padding: 44px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--bg1);
+}
+.footer-logo { font-family: var(--disp); font-size: 17px; letter-spacing: .08em; font-style: italic; }
+.footer-logo em { color: var(--blue); font-style: normal; }
+.footer-copy {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--lower);
+}
+
+/* ── STICKY ──────────────────────────── */
+#sticky {
+  position: fixed; bottom: 0; left: 0; right: 0; z-index: 400;
+  background: rgba(7,10,18,.94);
+  border-top: 1px solid var(--rule);
+  backdrop-filter: blur(20px) saturate(1.3);
+  padding: 14px 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  transform: translateY(100%);
+  transition: transform .5s var(--ease);
+}
+#sticky.show { transform: translateY(0); }
+.sticky-label .st-main {
+  font-family: var(--sans); font-size: 14px; font-weight: 400;
+  color: var(--white); letter-spacing: .02em;
+}
+.sticky-label .st-sub {
+  font-family: var(--sans); font-size: 9px; font-weight: 300;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--blue);
+  margin-top: 2px;
+}
+.sticky-btn {
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase;
+  background: var(--blue); color: #fff; border: none;
+  padding: 13px 26px; flex-shrink: 0; transition: opacity .25s;
+}
+.sticky-btn:hover { opacity: .85; }
+
+/* ── ANIMATION ───────────────────────── */
+@keyframes fadeUp   { from{opacity:0;transform:translateY(16px)} to{opacity:1;transform:translateY(0)} }
+@keyframes slideUp  { from{opacity:0;transform:translateY(108%)} to{opacity:1;transform:translateY(0)} }
+
+.fade-up {
+  opacity: 0; transform: translateY(24px);
+  transition: opacity .85s var(--ease), transform .85s var(--ease);
+}
+.fade-up.in { opacity: 1; transform: translateY(0); }
+.fade-l {
+  opacity: 0; transform: translateX(-22px);
+  transition: opacity .85s var(--ease), transform .85s var(--ease);
+}
+.fade-l.in { opacity: 1; transform: translateX(0); }
+.fade-r {
+  opacity: 0; transform: translateX(22px);
+  transition: opacity .85s var(--ease), transform .85s var(--ease);
+}
+.fade-r.in { opacity: 1; transform: translateX(0); }
+.d1{transition-delay:.1s} .d2{transition-delay:.2s} .d3{transition-delay:.3s} .d4{transition-delay:.4s}
+
+/* ── MOBILE ──────────────────────────── */
+@media(max-width:768px){
+  #nav { padding:0 20px; }
+  .nav-mid { display:none; }
+  #hero .hero-content { padding:0 20px 64px; }
+  #numbers { grid-template-columns:1fr 1fr; }
+  .num-cell:nth-child(even){ border-right:none; }
+  .num-cell:nth-child(3),.num-cell:nth-child(4){ border-top:1px solid var(--rule); }
+  #concept { grid-template-columns:1fr; }
+  .concept-left { padding:64px 20px; }
+  .concept-right { padding:48px 20px; }
+  .concept-photo { min-height:200px; }
+
+  /* Trainer */
+  .trainer-header { padding:64px 20px 0; }
+  .trainer-grid { grid-template-columns:1fr; margin:40px 20px 0; }
+  .trainer-card { grid-template-columns:1fr; }
+  .trainer-photo { width:100% !important; min-height:260px; }
+  .trainer-body { padding:32px 20px; }
+  .trainer-creds { grid-template-columns:1fr 1fr; }
+  .trainer-name { white-space:normal; font-size:24px; }
+
+  #results .results-header { padding:64px 20px 0; }
+  .results-grid { margin:40px 20px 0; grid-template-columns:1fr; }
+  .programs-header { padding:64px 20px 0; }
+  .prog { grid-template-columns:1fr; gap:12px; padding:24px 20px; }
+  .locations-header { padding:64px 20px 0; }
+  .locations-grid { margin:40px 20px 0; grid-template-columns:1fr !important; }
+  .map-area { margin:0 20px; }
+  #booking { grid-template-columns:1fr; }
+  .booking-left { padding:64px 20px; border-right:none; border-bottom:1px solid var(--rule); }
+  .booking-form { padding:48px 20px; }
+  .pricing-header { padding:64px 20px 0; }
+  .pricing-note { padding:0 20px 24px; }
+  .pricing-grid { margin:40px 20px 64px; grid-template-columns:1fr; }
+  #faq { grid-template-columns:1fr; }
+  .faq-left { padding:64px 20px 40px; border-right:none; border-bottom:1px solid var(--rule); }
+  .faq-right { padding:48px 20px; }
+  #finale { padding:100px 20px; }
+  .finale-actions { flex-direction:column; align-items:center; }
+  footer { padding:32px 20px; flex-direction:column; gap:10px; text-align:center; }
+  #sticky { padding:14px 20px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ───────────────────────────── -->
+<nav id="nav">
+  <div class="logo">BI<em>BODY</em>FIT</div>
+  <div class="nav-mid">
+    <a class="nav-a" href="#concept">コンセプト</a>
+    <a class="nav-a" href="#programs">プログラム</a>
+    <a class="nav-a" href="#locations">店舗</a>
+    <a class="nav-a" href="#pricing">料金</a>
+  </div>
+  <button class="nav-cta" onclick="go('booking')">無料体験を予約</button>
+</nav>
+
+<!-- ── HERO ──────────────────────────── -->
+<section id="hero">
+  <!-- Full-bleed background photo -->
+  <div class="hero-photo">
+    <!-- Unsplash: athletic woman training, dark moody lighting -->
+    <img
+      src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1800&q=85&auto=format&fit=crop"
+      alt="トレーニング"
+      loading="eager"
+    >
+    <div class="hero-photo-fallback"></div>
+  </div>
+  <div class="hero-overlay"></div>
+
+  <div class="hero-content">
+    <div class="hero-label">Personal Training Studio — 埼玉・群馬 2店舗</div>
+    <h1 class="hero-h">
+      <span class="hero-h-row"><span class="hero-h-inner">美しい</span></span>
+      <span class="hero-h-row"><span class="hero-h-inner">Body</span></span>
+      <span class="hero-h-row"><span class="hero-h-inner">をつくる</span></span>
+    </h1>
+    <p class="hero-sub">初心者から経験者まで。<br>科学的なアプローチで、あなたの身体を丁寧に変えていきます。</p>
+    <div class="hero-actions">
+      <button class="btn-fill" onclick="go('booking')">
+        無料体験を予約する
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <a href="#concept" class="btn-line">詳しく見る</a>
+    </div>
+  </div>
+
+  <div class="hero-scroll" aria-hidden="true">
+    <div class="scroll-bar"></div>
+    <div class="scroll-text">scroll</div>
+  </div>
+</section>
+
+<!-- ── TICKER ─────────────────────────── -->
+<div class="ticker-wrap" aria-hidden="true">
+  <div class="ticker-track">
+    <span class="ticker-item">Personal Training</span>
+    <span class="ticker-item accent">美しい身体をつくる</span>
+    <span class="ticker-item">Body Make</span>
+    <span class="ticker-item">2 Locations</span>
+    <span class="ticker-item accent">埼玉・群馬</span>
+    <span class="ticker-item">Diet Coaching</span>
+    <span class="ticker-item">Posture Analysis</span>
+    <span class="ticker-item accent">無料体験実施中</span>
+    <span class="ticker-item">Personal Training</span>
+    <span class="ticker-item accent">美しい身体をつくる</span>
+    <span class="ticker-item">Body Make</span>
+    <span class="ticker-item">2 Locations</span>
+    <span class="ticker-item accent">埼玉・群馬</span>
+    <span class="ticker-item">Diet Coaching</span>
+    <span class="ticker-item">Posture Analysis</span>
+    <span class="ticker-item accent">無料体験実施中</span>
+  </div>
+</div>
+
+<!-- ── NUMBERS ────────────────────────── -->
+<section id="numbers">
+  <div class="num-cell fade-up">
+    <div class="num-n" data-target="3" data-suffix="店舗"><span>0</span></div>
+    <div class="num-en">Locations</div>
+    <div class="num-jp">埼玉・群馬</div>
+  </div>
+  <div class="num-cell fade-up d1">
+    <div class="num-n" data-target="300" data-suffix="+"><span>0</span></div>
+    <div class="num-en">Members</div>
+    <div class="num-jp">延べ指導人数</div>
+  </div>
+  <div class="num-cell fade-up d2">
+    <div class="num-n" data-target="90" data-suffix="%"><span>0</span></div>
+    <div class="num-en">Goal Achievement</div>
+    <div class="num-jp">目標達成率</div>
+  </div>
+  <div class="num-cell fade-up d3">
+    <div class="num-n" data-target="93" data-suffix="%"><span>0</span></div>
+    <div class="num-en">Continuation</div>
+    <div class="num-jp">3ヶ月継続率</div>
+  </div>
+</section>
+
+<!-- ── CONCEPT ────────────────────────── -->
+<section id="concept">
+  <div class="concept-left">
+    <div class="eyebrow fade-up">Philosophy</div>
+    <h2 class="sec-title fade-up">ただ痩せるのでは<br>なく、<i>美しく</i>変わる</h2>
+    <div class="concept-lead fade-up">
+      <p>BIBODYFITは、体重の数字だけを追うのではなく、姿勢・筋バランス・体脂肪率——身体のすべてを整えることに焦点を当てています。</p>
+      <p>「美しくなりたい」という想いに、科学と誠実さで応えるために。データと対話を重ねながら、あなただけの変化を設計します。</p>
+    </div>
+    <div class="pillars fade-up">
+      <div class="pillar">
+        <div class="pillar-n">01</div>
+        <div class="pillar-body">
+          <h4>Complete Analysis</h4>
+          <p>体組成・姿勢・動作のデータから、個別プログラムを設計します。</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-n">02</div>
+        <div class="pillar-body">
+          <h4>Expert Coaching</h4>
+          <p>専任トレーナーが1対1で、フォームから食事まで丁寧に指導します。</p>
+        </div>
+      </div>
+      <div class="pillar">
+        <div class="pillar-n">03</div>
+        <div class="pillar-body">
+          <h4>Sustainable Results</h4>
+          <p>リバウンドしない習慣づくりを、生活習慣の改善とセットで進めます。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="concept-right fade-r">
+    <div class="concept-photo">
+      <!-- ここにスタジオ写真が入ります -->
+      <div class="concept-photo-label">
+        <svg width="52" height="52" viewBox="0 0 52 52">
+          <rect x="3" y="3" width="46" height="46" rx="2"/>
+          <circle cx="19" cy="20" r="7"/>
+          <path d="M3 46 L16 32 L25 40 L37 24 L49 36"/>
+        </svg>
+        <span>Studio Interior<br>Photography</span>
+      </div>
+    </div>
+    <div class="concept-data">
+      <div class="data-row">
+        <span class="data-k">ダイエット成功率</span>
+        <span class="data-v">90%</span>
+      </div>
+      <div class="data-row">
+        <span class="data-k">3ヶ月後リバウンドなし</span>
+        <span class="data-v">85%</span>
+      </div>
+      <div class="data-row">
+        <span class="data-k">3ヶ月以上継続率</span>
+        <span class="data-v">93%</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── TRAINER ────────────────────────── -->
+<section id="trainer">
+  <div class="trainer-header">
+    <div class="eyebrow fade-up">Trainer</div>
+    <h2 class="sec-title fade-up">2人の<i>トレーナー</i></h2>
+  </div>
+  <div class="trainer-grid">
+
+    <!-- 若葉店：本田 歩夢 -->
+    <div class="trainer-card fade-up">
+      <div class="trainer-photo">
+        <div class="trainer-photo-hint">
+          <svg width="44" height="56" viewBox="0 0 56 72"><circle cx="28" cy="20" r="13"/><path d="M2 68 C2 50 10 42 28 42 C46 42 54 50 54 68"/></svg>
+          <span>Trainer Portrait</span>
+        </div>
+        <div class="trainer-caption">
+          <div class="trainer-name">本田 歩夢</div>
+          <div class="trainer-role">Trainer — 若葉店</div>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <blockquote class="trainer-quote">
+          「誰もが理想の身体を手に入れられるように、一人一人に寄り添いながら、丁寧なサポートを心がけています。」
+        </blockquote>
+        <div class="trainer-text">
+          <p>初心者の方でも安心して通えるよう、お客様のペースに合わせた指導を大切にしています。目標に向かって一緒に歩んでいきましょう。</p>
+        </div>
+        <div class="trainer-creds">
+          <div class="cred"><div class="cred-l">資格</div><div class="cred-v">NSCA認定トレーナー</div></div>
+          <div class="cred"><div class="cred-l">店舗</div><div class="cred-v">若葉店（鶴ヶ島市）</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 伊勢崎店：落合 広樹 -->
+    <div class="trainer-card fade-up d1">
+      <div class="trainer-photo">
+        <div class="trainer-photo-hint">
+          <svg width="44" height="56" viewBox="0 0 56 72"><circle cx="28" cy="20" r="13"/><path d="M2 68 C2 50 10 42 28 42 C46 42 54 50 54 68"/></svg>
+          <span>Trainer Portrait</span>
+        </div>
+        <div class="trainer-caption">
+          <div class="trainer-name">落合 広樹</div>
+          <div class="trainer-role">Trainer — 伊勢崎店</div>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <blockquote class="trainer-quote">
+          「人には生まれつき4つの体の使い方のタイプがある。あなたに合った動きで、理想の美BODYへ。」
+        </blockquote>
+        <div class="trainer-text">
+          <p>4スタンス理論の資格を持ち、お客様一人ひとりのタイプを見極めた上でご指導します。トレーニングの成果が出ない方、体の不調にお悩みの方こそぜひ一度ご体験ください。</p>
+        </div>
+        <div class="trainer-creds">
+          <div class="cred"><div class="cred-l">資格</div><div class="cred-v">REASH PROJECT OFFICIAL TRAINER マスター級</div></div>
+          <div class="cred"><div class="cred-l">資格</div><div class="cred-v">日本パワーリフティング協会 コーチ1</div></div>
+          <div class="cred"><div class="cred-l">実績</div><div class="cred-v">全日本実業団パワーリフティング選手権 優勝（2015）</div></div>
+          <div class="cred"><div class="cred-l">実績</div><div class="cred-v">ジャパンクラシック選手権 準優勝（2018）</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── RESULTS ────────────────────────── -->
+<section id="results">
+  <div class="results-header">
+    <div class="eyebrow fade-up">Member Stories</div>
+    <h2 class="sec-title fade-up">変化の<i>記録</i></h2>
+  </div>
+  <div class="results-grid">
+    <div class="result-card fade-up">
+      <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
+      <div class="rc-name">A.K さん — 30歳 / OL</div>
+      <div class="rc-meta">入会3ヶ月 · 若葉店</div>
+      <div class="rc-data">
+        <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 7.5 kg</div></div>
+        <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 4.8 %</div></div>
+        <div class="rc-datum"><div class="rd-k">ウエスト</div><div class="rd-v">− 7 cm</div></div>
+      </div>
+      <p class="rc-quote">「食事を我慢しなくていいと言われて半信半疑でしたが、3ヶ月で仕事着のサイズが変わりました。」</p>
+    </div>
+    <div class="result-card fade-up d1">
+      <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
+      <div class="rc-name">M.S さん — 38歳 / 主婦</div>
+      <div class="rc-meta">入会2ヶ月 · 若葉店</div>
+      <div class="rc-data">
+        <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 5.8 kg</div></div>
+        <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 3.9 %</div></div>
+        <div class="rc-datum"><div class="rd-k">姿勢</div><div class="rd-v">改善</div></div>
+      </div>
+      <p class="rc-quote">「産後の身体をよく理解してくれて安心して通えました。友人に別人みたいと言われています。」</p>
+    </div>
+    <div class="result-card fade-up d2">
+      <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
+      <div class="rc-name">Y.T さん — 25歳 / 看護師</div>
+      <div class="rc-meta">入会4ヶ月 · 伊勢崎店</div>
+      <div class="rc-data">
+        <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 9.2 kg</div></div>
+        <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 5.5 %</div></div>
+        <div class="rc-datum"><div class="rd-k">不規則勤務対応</div><div class="rd-v">○</div></div>
+      </div>
+      <p class="rc-quote">「夜勤のある生活でも無理なく続けられました。自分の身体への自信が戻ってきました。」</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── PROGRAMS ────────────────────────── -->
+<section id="programs">
+  <div class="programs-header">
+    <div class="eyebrow fade-up">Programs</div>
+    <h2 class="sec-title fade-up">あなたに合った<i>プログラム</i></h2>
+  </div>
+  <div class="programs-list">
+    <div class="prog fade-up">
+      <div class="prog-num">01</div>
+      <div class="prog-body">
+        <div class="prog-name">Body Make</div>
+        <div class="prog-desc">美しいプロポーションを科学的に設計する。体組成データに基づいた個別アプローチ。</div>
+        <div class="prog-tags"><span class="prog-tag">Diet</span><span class="prog-tag">Shape</span><span class="prog-tag">Nutrition</span></div>
+      </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
+    <div class="prog fade-up d1">
+      <div class="prog-num">02</div>
+      <div class="prog-body">
+        <div class="prog-name">Diet & Slim</div>
+        <div class="prog-desc">食べながら、健康的に痩せる。リバウンドしない身体と習慣を同時につくる。</div>
+        <div class="prog-tags"><span class="prog-tag">Slim</span><span class="prog-tag">Habit</span><span class="prog-tag">Lifestyle</span></div>
+      </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
+    <div class="prog fade-up d2">
+      <div class="prog-num">03</div>
+      <div class="prog-body">
+        <div class="prog-name">Posture & Recovery</div>
+        <div class="prog-desc">姿勢改善、肩こり・腰痛・産後の回復。身体の機能から美しさを取り戻す。</div>
+        <div class="prog-tags"><span class="prog-tag">Posture</span><span class="prog-tag">Rehab</span><span class="prog-tag">Core</span></div>
+      </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
+    <div class="prog fade-up d3">
+      <div class="prog-num">04</div>
+      <div class="prog-body">
+        <div class="prog-name">Wedding & Special</div>
+        <div class="prog-desc">結婚式、成人式——特別な日のための集中設計。逆算したピークアプローチ。</div>
+        <div class="prog-tags"><span class="prog-tag">Wedding</span><span class="prog-tag">Event</span><span class="prog-tag">Peak</span></div>
+      </div>
+      <div class="prog-arrow">
+        <svg width="16" height="16" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LOCATIONS ──────────────────────── -->
+<section id="locations">
+  <div class="locations-header">
+    <div class="eyebrow fade-up">Locations</div>
+    <h2 class="sec-title fade-up">2つの<i>スタジオ</i></h2>
+  </div>
+  <div class="locations-grid" style="grid-template-columns: repeat(2,1fr);">
+    <div class="loc fade-up">
+      <div class="loc-num">Store 01</div>
+      <div class="loc-name">若葉店</div>
+      <div class="loc-info">
+        〒350-2201 埼玉県鶴ヶ島市富士見1丁目8-10 ドルミ若葉202<br>
+        東武東上線 若葉駅東口 徒歩3分 / 駐車場あり<br>
+        TEL <a href="tel:049-298-8484">049·298·8484</a><br>
+        10:00 — 21:00 ／ 定休日：火・金
+      </div>
+      <a href="https://www.instagram.com/bibodyfit_shiki_/" target="_blank" class="loc-sns">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    </div>
+    <div class="loc fade-up d1">
+      <div class="loc-num">Store 02</div>
+      <div class="loc-name">伊勢崎店</div>
+      <div class="loc-info">
+        〒372-0844 群馬県伊勢崎市羽黒町5-17 GRAN SIX 106<br>
+        東武伊勢崎線 剛志駅近く / 伊勢崎高校・東京福祉大学 周辺<br>
+        TEL <a href="tel:0270-61-7330">0270·61·7330</a><br>
+        10:00 — 21:00 ／ 定休日：火・金
+      </div>
+      <a href="https://www.instagram.com/bibodyfit_isesaki/" target="_blank" class="loc-sns">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
+    </div>
+  </div>
+  <div class="map-area fade-up">
+    <svg width="30" height="30" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke-width=".8"/><circle cx="12" cy="10" r="3" stroke-width=".8"/></svg>
+    <p>Google Map — ここに地図が入ります</p>
+  </div>
+</section>
+
+<!-- ── BOOKING ────────────────────────── -->
+<section id="booking">
+  <div class="booking-left">
+    <div class="eyebrow fade-up">Free Trial</div>
+    <h2 class="booking-title fade-up">まず、<br><i>体感してみる。</i></h2>
+    <p class="booking-lead fade-up">カウンセリング・体組成測定・60分のトレーニング、すべて無料です。その場での入会のお勧めは一切しません。</p>
+    <div class="booking-trust fade-up">
+      <div class="trust-row"><span class="trust-dot"></span>完全個室・完全マンツーマン</div>
+      <div class="trust-row"><span class="trust-dot"></span>勧誘・即決プレッシャーなし</div>
+      <div class="trust-row"><span class="trust-dot"></span>2店舗いずれかをご選択</div>
+      <div class="trust-row"><span class="trust-dot"></span>体組成測定・カウンセリング込み</div>
+    </div>
+  </div>
+  <div class="booking-form fade-up">
+    <div class="form-bar">
+      <div class="fb on" id="fb1"></div>
+      <div class="fb" id="fb2"></div>
+      <div class="fb" id="fb3"></div>
+    </div>
+    <!-- Step 1 -->
+    <div class="fstep active" id="fs1">
+      <div class="fstep-label">01 / 03</div>
+      <div class="fstep-q">目標を<br>聞かせてください</div>
+      <div class="fopts">
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">ダイエット・体型を変えたい</div><div class="fopt-sub">脂肪を減らし、美しく変わる</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">引き締め・ボディメイク</div><div class="fopt-sub">メリハリのある美しい身体へ</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">姿勢改善・健康回復</div><div class="fopt-sub">肩こり・腰痛・産後ケア</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">特別な日に向けて</div><div class="fopt-sub">結婚式・成人式・撮影</div></div></div>
+      </div>
+      <div class="fnav"><button class="fnext" onclick="fNext(1)">次へ</button></div>
+    </div>
+    <!-- Step 2 -->
+    <div class="fstep" id="fs2">
+      <div class="fstep-label">02 / 03</div>
+      <div class="fstep-q">いつ頃から<br>始めたいですか？</div>
+      <div class="fopts">
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">できるだけ早く</div><div class="fopt-sub">スケジュールを優先して調整します</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">1〜2週間以内に</div><div class="fopt-sub">まず話を聞いてから決めたい</div></div></div>
+        <div class="fopt" onclick="pick(this)"><input type="radio"><div class="fopt-radio"></div><div><div class="fopt-main">来月以降</div><div class="fopt-sub">じっくり検討したい</div></div></div>
+      </div>
+      <div class="fnav">
+        <button class="fback" onclick="fBack(2)">戻る</button>
+        <button class="fnext" onclick="fNext(2)">次へ</button>
+      </div>
+    </div>
+    <!-- Step 3 -->
+    <div class="fstep" id="fs3">
+      <div class="fstep-label">03 / 03</div>
+      <div class="fstep-q">ご連絡先を<br>入力してください</div>
+      <div class="ffield"><label>お名前</label><input type="text" placeholder="山田 花子"></div>
+      <div class="ffield"><label>電話番号</label><input type="tel" placeholder="090 · 0000 · 0000"></div>
+      <div class="ffield"><label>希望店舗</label><input type="text" placeholder="若葉店 / 伊勢崎店"></div>
+      <div class="fnote">送信後、24時間以内にご連絡します。強引な勧誘は一切ありません。</div>
+      <div class="fnav">
+        <button class="fback" onclick="fBack(3)">戻る</button>
+        <button class="fnext last" onclick="fSubmit()">予約を確定する</button>
+      </div>
+    </div>
+    <!-- Done -->
+    <div class="form-done" id="fdone">
+      <div class="done-icon">✓</div>
+      <div class="done-title">予約完了</div>
+      <div class="done-body">ありがとうございます。<br>24時間以内にスタッフよりご連絡いたします。<br><br>美しい変化の始まりを、心よりお待ちしています。</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── PRICING ─────────────────────────── -->
+<section id="pricing">
+  <div class="pricing-header">
+    <div class="eyebrow fade-up">Pricing</div>
+    <h2 class="sec-title fade-up">シンプルな<i>料金</i></h2>
+  </div>
+  <p class="pricing-note fade-up">追加料金なしで<strong>2人まで</strong>通えます。夫婦・親子・カップル・友人と一緒に、コスパよく続けられます。</p>
+  <div class="pricing-grid">
+    <div class="price-col fade-up">
+      <div class="price-name">LIGHT</div>
+      <div class="price-desc">まず始めてみる。月4回でトレーニング習慣をつくりたい方へ。</div>
+      <div class="price-amount">¥27,000</div>
+      <div class="price-per">/ 月（月4回）<span class="price-tax">税込 ¥29,700</span></div>
+      <ul class="price-items">
+        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 4回</li>
+        <li class="price-item"><span class="pi-dot"></span>体組成測定</li>
+        <li class="price-item"><span class="pi-dot"></span>食事アドバイス</li>
+        <li class="price-item"><span class="pi-dot"></span>2人まで同時利用可</li>
+      </ul>
+      <div class="price-per-session">1回あたり ¥6,750（税込 ¥7,425）</div>
+      <button class="price-btn" onclick="go('booking')">体験を予約する</button>
+    </div>
+    <div class="price-col featured fade-up d1">
+      <div class="price-badge">おすすめ</div>
+      <div class="price-name">美BODY</div>
+      <div class="price-desc">最も選ばれているプラン。週2回で着実に美しく変わる。</div>
+      <div class="price-amount">¥50,000</div>
+      <div class="price-per">/ 月（月8回）<span class="price-tax">税込 ¥55,000</span></div>
+      <ul class="price-items">
+        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 8回</li>
+        <li class="price-item"><span class="pi-dot"></span>体組成測定・姿勢分析</li>
+        <li class="price-item"><span class="pi-dot"></span>食事管理サポート</li>
+        <li class="price-item"><span class="pi-dot"></span>LINEサポート</li>
+        <li class="price-item"><span class="pi-dot"></span>2人まで同時利用可</li>
+      </ul>
+      <div class="price-per-session">1回あたり ¥6,250（税込 ¥6,875）</div>
+      <button class="price-btn" onclick="go('booking')">体験を予約する</button>
+    </div>
+    <div class="price-col fade-up d2">
+      <div class="price-name">短期集中</div>
+      <div class="price-desc">食事指導込みの回数券制。短期間で大きく変わりたい方へ。</div>
+      <div class="price-amount">¥87,000</div>
+      <div class="price-per">/ 12回分<span class="price-tax">税込 ¥95,700</span></div>
+      <ul class="price-items">
+        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 12回（回数券）</li>
+        <li class="price-item"><span class="pi-dot"></span>食事指導込み</li>
+        <li class="price-item"><span class="pi-dot"></span>体組成測定・詳細分析</li>
+        <li class="price-item"><span class="pi-dot"></span>2人まで同時利用可</li>
+      </ul>
+      <div class="price-per-session">1回あたり ¥7,250（税込 ¥7,975）</div>
+      <button class="price-btn" onclick="go('booking')">体験を予約する</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── FAQ ────────────────────────────── -->
+<section id="faq">
+  <div class="faq-left">
+    <div class="eyebrow fade-up">FAQ</div>
+    <h2 class="sec-title fade-up" style="margin-bottom:0">よくある<br><i>質問</i></h2>
+    <p class="faq-intro fade-up">体験前の不安に、正直にお答えします。ここにない質問はお電話またはLINEでどうぞ。</p>
+  </div>
+  <div class="faq-right">
+    <div class="faq-list fade-up">
+      <div class="faq-item">
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">運動が全くの初心者でも大丈夫ですか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">はい、会員の約50%が運動未経験からのスタートです。初回カウンセリングで体力・体型・生活習慣を丁寧に聞いた上で、ゼロから設計します。「怖い」「何をすればよいかわからない」という方こそ、マンツーマン指導が最適です。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">食事制限が苦手ですが続けられますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">「食べながら変わる」アプローチを基本としています。厳しい制限ではなく、食事の質・タイミング・バランスを調整します。外食やお酒も上手に取り入れながら、楽しく続けられる習慣をつくります。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">産後でも通えますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">はい、産後ケアを得意とするトレーナーが対応します。骨盤・コア・ホルモンバランスを考慮したプログラムを設計します。医師の許可が出ていれば、産後3ヶ月以降を目安にご相談ください。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">体験後に強引な勧誘はありますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">一切ありません。体験後にプランのご案内はしますが、その場での決断を求めることはしません。「ここで続けたい」と感じた方とのみ、ご縁をいただきたいと考えています。</div></div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-q-btn" onclick="tFaq(this)"><span class="faq-q-text">3店舗の違いはありますか？</span><span class="faq-icon">+</span></button>
+        <div class="faq-ans"><div class="faq-ans-inner">設備・サービス品質はすべての店舗で統一されています。お住まいや職場に近い店舗をお選びいただければ幸いです。引っ越しなど特別な事情がある場合は店舗変更もご相談ください。</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── FINALE ──────────────────────────── -->
+<section id="finale">
+  <div class="finale-glow"></div>
+  <div class="finale-inner fade-up">
+    <div class="finale-eyebrow">Free Trial</div>
+    <h2 class="finale-h">まず、<br><i>動いてみる。</i></h2>
+    <p class="finale-sub">体験セッションは完全無料です。カウンセリングと60分のトレーニングで、身体の現在地を知ることから始めましょう。</p>
+    <div class="finale-actions">
+      <button class="btn-fill" onclick="go('booking')">
+        無料体験を予約する
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+      <a href="tel:000-0000-0000" class="btn-line">電話で問い合わせる</a>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ──────────────────────────── -->
+<footer>
+  <div class="footer-logo">BI<em>BODY</em>FIT</div>
+  <div class="footer-copy">© 2025 BIBODYFIT. All rights reserved.</div>
+</footer>
+
+<!-- ── STICKY ──────────────────────────── -->
+<div id="sticky">
+  <div class="sticky-label">
+    <div class="st-main">無料体験を申し込む</div>
+    <div class="st-sub">カウンセリング + 60分 — 完全無料</div>
+  </div>
+  <button class="sticky-btn" onclick="go('booking')">予約する</button>
+</div>
+
+<script>
+/* helpers */
+function go(id){ document.getElementById(id).scrollIntoView({behavior:'smooth'}); }
+
+/* nav */
+const nav = document.getElementById('nav');
+const sticky = document.getElementById('sticky');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('filled', scrollY > 60);
+  sticky.classList.toggle('show', scrollY > window.innerHeight * .55);
+}, {passive:true});
+
+/* reveal */
+const ro = new IntersectionObserver(entries => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target); }});
+}, {threshold: .08});
+document.querySelectorAll('.fade-up,.fade-l,.fade-r').forEach(el => ro.observe(el));
+
+/* counters */
+function animCount(el){
+  const target = +el.dataset.target, suf = el.dataset.suffix || '';
+  const sp = el.querySelector('span'); if(!sp) return;
+  let c = 0; const inc = target / 90;
+  const t = setInterval(() => {
+    c = Math.min(c + inc, target);
+    sp.textContent = Math.floor(c) + suf;
+    if(c >= target) clearInterval(t);
+  }, 16);
+}
+const numObs = new IntersectionObserver(es => {
+  es.forEach(e => { if(e.isIntersecting){ e.target.querySelectorAll('[data-target]').forEach(animCount); numObs.unobserve(e.target); }});
+}, {threshold:.3});
+const numsEl = document.getElementById('numbers');
+if(numsEl) numObs.observe(numsEl);
+
+/* faq */
+function tFaq(btn){
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+  if(!isOpen) item.classList.add('open');
+}
+
+/* form */
+let step = 1;
+function pick(el){ el.closest('.fopts').querySelectorAll('.fopt').forEach(o=>o.classList.remove('sel')); el.classList.add('sel'); }
+function updateBar(){ [1,2,3].forEach(i => document.getElementById('fb'+i).classList.toggle('on', i <= step)); }
+function fNext(from){
+  if(from < 3){
+    document.getElementById('fs'+from).classList.remove('active');
+    step = from + 1;
+    document.getElementById('fs'+step).classList.add('active');
+    updateBar();
+  }
+}
+function fBack(from){
+  if(from > 1){
+    document.getElementById('fs'+from).classList.remove('active');
+    step = from - 1;
+    document.getElementById('fs'+step).classList.add('active');
+    updateBar();
+  }
+}
+function fSubmit(){
+  document.getElementById('fs3').classList.remove('active');
+  document.getElementById('fdone').classList.add('show');
+  [1,2,3].forEach(i => document.getElementById('fb'+i).classList.add('on'));
+}
+</script>
+</body>
+</html>
