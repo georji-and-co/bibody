@@ -365,19 +365,26 @@ body::after {
 }
 
 /* ── TRAINER ─────────────────────────── */
-#trainer {
-  border-top: 1px solid var(--rule);
+#trainer { border-top: 1px solid var(--rule); }
+.trainer-header { padding: 80px 48px 0; }
+.trainer-grid {
   display: grid; grid-template-columns: 1fr 1fr;
+  gap: 1px; background: var(--rule);
+  border: 1px solid var(--rule); margin: 48px 48px 0;
+}
+.trainer-card {
+  background: var(--bg1);
+  display: grid; grid-template-columns: 220px 1fr;
 }
 .trainer-photo {
   background: var(--bg2); position: relative;
-  overflow: hidden; min-height: 560px;
+  overflow: hidden; min-height: 380px; width: 220px;
   display: flex; align-items: center; justify-content: center;
 }
 .trainer-photo::before {
   content: ''; position: absolute;
   top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(to right, var(--blue), rgba(68,117,242,0));
+  background: linear-gradient(to right, var(--blue), rgba(85,133,255,0));
 }
 .trainer-photo-hint {
   display: flex; flex-direction: column; align-items: center;
@@ -390,51 +397,49 @@ body::after {
 }
 .trainer-caption {
   position: absolute; bottom: 0; left: 0; right: 0;
-  padding: 52px 40px 36px;
+  padding: 36px 16px 18px;
   background: linear-gradient(transparent, rgba(8,12,24,.97));
 }
 .trainer-name {
-  font-family: var(--disp); font-size: 52px; line-height: 1; font-style: italic;
-  margin-bottom: 6px;
+  font-family: var(--disp); font-size: 28px; line-height: 1.1; font-style: italic;
+  margin-bottom: 5px; white-space: nowrap;
 }
 .trainer-role {
-  font-family: var(--sans); font-size: 10px; font-weight: 300;
-  letter-spacing: .16em; text-transform: uppercase; color: var(--blue);
+  font-family: var(--sans); font-size: 8px; font-weight: 300;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--blue);
+  white-space: nowrap;
 }
-
 .trainer-body {
-  padding: 80px 56px;
+  padding: 40px 36px;
   background: var(--bg1);
   display: flex; flex-direction: column; justify-content: center;
 }
 .trainer-quote {
-  font-family: var(--disp); font-size: clamp(16px,2vw,22px);
-  font-weight: 400; font-style: italic; line-height: 1.7;
+  font-family: var(--disp); font-size: clamp(13px,1.4vw,17px);
+  font-weight: 400; font-style: italic; line-height: 1.75;
   color: var(--white);
-  border-left: 2px solid var(--blue); padding-left: 24px;
-  margin-bottom: 40px;
+  border-left: 2px solid var(--blue); padding-left: 18px;
+  margin-bottom: 24px;
 }
 .trainer-text {
-  font-size: 13px; line-height: 2.5; color: var(--mid);
-  margin-bottom: 40px;
+  font-size: 12px; line-height: 2.3; color: var(--mid);
+  margin-bottom: 24px;
 }
-.trainer-text p + p { margin-top: 16px; }
+.trainer-text p + p { margin-top: 12px; }
 .trainer-creds {
   display: grid; grid-template-columns: 1fr 1fr;
   gap: 1px; background: var(--rule);
   border: 1px solid var(--rule);
 }
-.cred {
-  background: var(--bg2); padding: 18px 20px;
-}
+.cred { background: var(--bg2); padding: 13px 15px; }
 .cred-l {
   font-family: var(--sans); font-size: 8px; font-weight: 300;
-  letter-spacing: .16em; text-transform: uppercase;
-  color: var(--blue); margin-bottom: 5px;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--blue); margin-bottom: 4px;
 }
 .cred-v {
-  font-family: var(--sans); font-size: 13px; font-weight: 400;
-  color: var(--white);
+  font-family: var(--sans); font-size: 11px; font-weight: 400;
+  color: var(--white); line-height: 1.4;
 }
 
 /* ── RESULTS ─────────────────────────── */
@@ -576,6 +581,17 @@ body::after {
   font-family: var(--sans); font-size: 9px; font-weight: 300;
   letter-spacing: .16em; text-transform: uppercase; color: var(--lower);
 }
+
+.loc-sns {
+  display: inline-flex; align-items: center; gap: 6px;
+  margin-top: 16px;
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--blue); border: 1px solid var(--blue-line);
+  padding: 6px 12px; transition: background .25s, color .25s;
+}
+.loc-sns:hover { background: var(--blue); color: #fff; }
+.loc-sns svg { flex-shrink: 0; }
 
 /* ── BOOKING ─────────────────────────── */
 #booking {
@@ -734,6 +750,21 @@ body::after {
 .price-col.featured .price-btn { background: var(--blue); color: #fff; border-color: var(--blue); }
 .price-col.featured .price-btn:hover { opacity: .85; }
 
+.pricing-note {
+  font-size: 13px; line-height: 2; color: var(--mid);
+  padding: 0 48px 32px; margin-top: 24px;
+}
+.pricing-note strong { color: var(--blue); font-weight: 400; }
+.price-tax {
+  display: block; font-size: 10px; color: var(--lower);
+  margin-top: 2px; letter-spacing: 0;
+}
+.price-per-session {
+  font-family: var(--sans); font-size: 10px; font-weight: 300;
+  color: var(--blue); letter-spacing: .05em;
+  margin-bottom: 20px; margin-top: -16px;
+}
+
 /* ── FAQ ─────────────────────────────── */
 #faq {
   border-top: 1px solid var(--rule);
@@ -873,20 +904,28 @@ footer {
   .concept-left { padding:64px 20px; }
   .concept-right { padding:48px 20px; }
   .concept-photo { min-height:200px; }
-  #trainer { grid-template-columns:1fr; }
-  .trainer-body { padding:40px 20px; }
+
+  /* Trainer */
+  .trainer-header { padding:64px 20px 0; }
+  .trainer-grid { grid-template-columns:1fr; margin:40px 20px 0; }
+  .trainer-card { grid-template-columns:1fr; }
+  .trainer-photo { width:100% !important; min-height:260px; }
+  .trainer-body { padding:32px 20px; }
   .trainer-creds { grid-template-columns:1fr 1fr; }
+  .trainer-name { white-space:normal; font-size:24px; }
+
   #results .results-header { padding:64px 20px 0; }
   .results-grid { margin:40px 20px 0; grid-template-columns:1fr; }
   .programs-header { padding:64px 20px 0; }
   .prog { grid-template-columns:1fr; gap:12px; padding:24px 20px; }
   .locations-header { padding:64px 20px 0; }
-  .locations-grid { margin:40px 20px 0; grid-template-columns:1fr; }
+  .locations-grid { margin:40px 20px 0; grid-template-columns:1fr !important; }
   .map-area { margin:0 20px; }
   #booking { grid-template-columns:1fr; }
   .booking-left { padding:64px 20px; border-right:none; border-bottom:1px solid var(--rule); }
   .booking-form { padding:48px 20px; }
   .pricing-header { padding:64px 20px 0; }
+  .pricing-note { padding:0 20px 24px; }
   .pricing-grid { margin:40px 20px 64px; grid-template-columns:1fr; }
   #faq { grid-template-columns:1fr; }
   .faq-left { padding:64px 20px 40px; border-right:none; border-bottom:1px solid var(--rule); }
@@ -927,7 +966,7 @@ footer {
   <div class="hero-overlay"></div>
 
   <div class="hero-content">
-    <div class="hero-label">Personal Training Studio — 埼玉・群馬 3店舗</div>
+    <div class="hero-label">Personal Training Studio — 埼玉・群馬 2店舗</div>
     <h1 class="hero-h">
       <span class="hero-h-row"><span class="hero-h-inner">美しい</span></span>
       <span class="hero-h-row"><span class="hero-h-inner">Body</span></span>
@@ -955,7 +994,7 @@ footer {
     <span class="ticker-item">Personal Training</span>
     <span class="ticker-item accent">美しい身体をつくる</span>
     <span class="ticker-item">Body Make</span>
-    <span class="ticker-item">3 Locations</span>
+    <span class="ticker-item">2 Locations</span>
     <span class="ticker-item accent">埼玉・群馬</span>
     <span class="ticker-item">Diet Coaching</span>
     <span class="ticker-item">Posture Analysis</span>
@@ -963,7 +1002,7 @@ footer {
     <span class="ticker-item">Personal Training</span>
     <span class="ticker-item accent">美しい身体をつくる</span>
     <span class="ticker-item">Body Make</span>
-    <span class="ticker-item">3 Locations</span>
+    <span class="ticker-item">2 Locations</span>
     <span class="ticker-item accent">埼玉・群馬</span>
     <span class="ticker-item">Diet Coaching</span>
     <span class="ticker-item">Posture Analysis</span>
@@ -1059,34 +1098,66 @@ footer {
 
 <!-- ── TRAINER ────────────────────────── -->
 <section id="trainer">
-  <div class="trainer-photo fade-l">
-    <!-- ここにトレーナー写真が入ります -->
-    <div class="trainer-photo-hint">
-      <svg width="56" height="72" viewBox="0 0 56 72">
-        <circle cx="28" cy="20" r="13"/>
-        <path d="M2 68 C2 50 10 42 28 42 C46 42 54 50 54 68"/>
-      </svg>
-      <span>Trainer Portrait</span>
-    </div>
-    <div class="trainer-caption">
-      <div class="trainer-name">田中 ◯◯</div>
-      <div class="trainer-role">Head Trainer</div>
-    </div>
+  <div class="trainer-header">
+    <div class="eyebrow fade-up">Trainer</div>
+    <h2 class="sec-title fade-up">2人の<i>トレーナー</i></h2>
   </div>
-  <div class="trainer-body fade-r">
-    <blockquote class="trainer-quote">
-      「美しくなりたいという気持ちに、全力で応え続けることが、私の仕事です。」
-    </blockquote>
-    <div class="trainer-text">
-      <p>自分自身がかつて体型にコンプレックスを抱えていた。何をやっても変われないと思っていた時期があった。だからこそ、クライアントの「変わりたい」という言葉の重さが、心からわかります。</p>
-      <p>難しいことは何もない。正しい知識と方法で、丁寧に継続すること——それだけで、身体は必ず応えてくれます。そのプロセスに伴走するのが、BIBODYFITのあり方です。</p>
+  <div class="trainer-grid">
+
+    <!-- 若葉店：本田 歩夢 -->
+    <div class="trainer-card fade-up">
+      <div class="trainer-photo">
+        <div class="trainer-photo-hint">
+          <svg width="44" height="56" viewBox="0 0 56 72"><circle cx="28" cy="20" r="13"/><path d="M2 68 C2 50 10 42 28 42 C46 42 54 50 54 68"/></svg>
+          <span>Trainer Portrait</span>
+        </div>
+        <div class="trainer-caption">
+          <div class="trainer-name">本田 歩夢</div>
+          <div class="trainer-role">Trainer — 若葉店</div>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <blockquote class="trainer-quote">
+          「誰もが理想の身体を手に入れられるように、一人一人に寄り添いながら、丁寧なサポートを心がけています。」
+        </blockquote>
+        <div class="trainer-text">
+          <p>初心者の方でも安心して通えるよう、お客様のペースに合わせた指導を大切にしています。目標に向かって一緒に歩んでいきましょう。</p>
+        </div>
+        <div class="trainer-creds">
+          <div class="cred"><div class="cred-l">資格</div><div class="cred-v">NSCA認定トレーナー</div></div>
+          <div class="cred"><div class="cred-l">店舗</div><div class="cred-v">若葉店（鶴ヶ島市）</div></div>
+        </div>
+      </div>
     </div>
-    <div class="trainer-creds">
-      <div class="cred"><div class="cred-l">指導歴</div><div class="cred-v">8年以上</div></div>
-      <div class="cred"><div class="cred-l">指導実績</div><div class="cred-v">300名以上</div></div>
-      <div class="cred"><div class="cred-l">得意分野</div><div class="cred-v">女性ボディメイク</div></div>
-      <div class="cred"><div class="cred-l">資格</div><div class="cred-v">NSCA-CPT</div></div>
+
+    <!-- 伊勢崎店：落合 広樹 -->
+    <div class="trainer-card fade-up d1">
+      <div class="trainer-photo">
+        <div class="trainer-photo-hint">
+          <svg width="44" height="56" viewBox="0 0 56 72"><circle cx="28" cy="20" r="13"/><path d="M2 68 C2 50 10 42 28 42 C46 42 54 50 54 68"/></svg>
+          <span>Trainer Portrait</span>
+        </div>
+        <div class="trainer-caption">
+          <div class="trainer-name">落合 広樹</div>
+          <div class="trainer-role">Trainer — 伊勢崎店</div>
+        </div>
+      </div>
+      <div class="trainer-body">
+        <blockquote class="trainer-quote">
+          「人には生まれつき4つの体の使い方のタイプがある。あなたに合った動きで、理想の美BODYへ。」
+        </blockquote>
+        <div class="trainer-text">
+          <p>4スタンス理論の資格を持ち、お客様一人ひとりのタイプを見極めた上でご指導します。トレーニングの成果が出ない方、体の不調にお悩みの方こそぜひ一度ご体験ください。</p>
+        </div>
+        <div class="trainer-creds">
+          <div class="cred"><div class="cred-l">資格</div><div class="cred-v">REASH PROJECT OFFICIAL TRAINER マスター級</div></div>
+          <div class="cred"><div class="cred-l">資格</div><div class="cred-v">日本パワーリフティング協会 コーチ1</div></div>
+          <div class="cred"><div class="cred-l">実績</div><div class="cred-v">全日本実業団パワーリフティング選手権 優勝（2015）</div></div>
+          <div class="cred"><div class="cred-l">実績</div><div class="cred-v">ジャパンクラシック選手権 準優勝（2018）</div></div>
+        </div>
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -1100,7 +1171,7 @@ footer {
     <div class="result-card fade-up">
       <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
       <div class="rc-name">A.K さん — 30歳 / OL</div>
-      <div class="rc-meta">入会3ヶ月 · 志木店</div>
+      <div class="rc-meta">入会3ヶ月 · 若葉店</div>
       <div class="rc-data">
         <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 7.5 kg</div></div>
         <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 4.8 %</div></div>
@@ -1111,7 +1182,7 @@ footer {
     <div class="result-card fade-up d1">
       <div class="rc-avatar"><svg width="22" height="30" viewBox="0 0 22 30"><circle cx="11" cy="8" r="6"/><path d="M1 28 C1 19 5 16 11 16 C17 16 21 19 21 28" stroke-width="1"/></svg></div>
       <div class="rc-name">M.S さん — 38歳 / 主婦</div>
-      <div class="rc-meta">入会2ヶ月 · 坂戸店</div>
+      <div class="rc-meta">入会2ヶ月 · 若葉店</div>
       <div class="rc-data">
         <div class="rc-datum"><div class="rd-k">体重</div><div class="rd-v">− 5.8 kg</div></div>
         <div class="rc-datum"><div class="rd-k">体脂肪率</div><div class="rd-v">− 3.9 %</div></div>
@@ -1191,23 +1262,36 @@ footer {
 <section id="locations">
   <div class="locations-header">
     <div class="eyebrow fade-up">Locations</div>
-    <h2 class="sec-title fade-up">3つの<i>スタジオ</i></h2>
+    <h2 class="sec-title fade-up">2つの<i>スタジオ</i></h2>
   </div>
-  <div class="locations-grid">
+  <div class="locations-grid" style="grid-template-columns: repeat(2,1fr);">
     <div class="loc fade-up">
       <div class="loc-num">Store 01</div>
-      <div class="loc-name">志木店</div>
-      <div class="loc-info">埼玉県志木市○○1-2-3<br>TEL <a href="tel:000-0000-0000">000·0000·0000</a><br>平日 10:00 — 21:00<br>土日祝 10:00 — 19:00</div>
+      <div class="loc-name">若葉店</div>
+      <div class="loc-info">
+        〒350-2201 埼玉県鶴ヶ島市富士見1丁目8-10 ドルミ若葉202<br>
+        東武東上線 若葉駅東口 徒歩3分 / 駐車場あり<br>
+        TEL <a href="tel:049-298-8484">049·298·8484</a><br>
+        10:00 — 21:00 ／ 定休日：火・金
+      </div>
+      <a href="https://www.instagram.com/bibodyfit_shiki_/" target="_blank" class="loc-sns">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
     </div>
     <div class="loc fade-up d1">
       <div class="loc-num">Store 02</div>
-      <div class="loc-name">坂戸店</div>
-      <div class="loc-info">埼玉県坂戸市○○4-5-6<br>TEL <a href="tel:000-0000-0000">000·0000·0000</a><br>平日 10:00 — 21:00<br>土日祝 10:00 — 19:00</div>
-    </div>
-    <div class="loc fade-up d2">
-      <div class="loc-num">Store 03</div>
       <div class="loc-name">伊勢崎店</div>
-      <div class="loc-info">群馬県伊勢崎市○○7-8-9<br>TEL <a href="tel:000-0000-0000">000·0000·0000</a><br>平日 10:00 — 21:00<br>土日祝 10:00 — 19:00</div>
+      <div class="loc-info">
+        〒372-0844 群馬県伊勢崎市羽黒町5-17 GRAN SIX 106<br>
+        東武伊勢崎線 剛志駅近く / 伊勢崎高校・東京福祉大学 周辺<br>
+        TEL <a href="tel:0270-61-7330">0270·61·7330</a><br>
+        10:00 — 21:00 ／ 定休日：火・金
+      </div>
+      <a href="https://www.instagram.com/bibodyfit_isesaki/" target="_blank" class="loc-sns">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Instagram
+      </a>
     </div>
   </div>
   <div class="map-area fade-up">
@@ -1225,7 +1309,7 @@ footer {
     <div class="booking-trust fade-up">
       <div class="trust-row"><span class="trust-dot"></span>完全個室・完全マンツーマン</div>
       <div class="trust-row"><span class="trust-dot"></span>勧誘・即決プレッシャーなし</div>
-      <div class="trust-row"><span class="trust-dot"></span>3店舗いずれかをご選択</div>
+      <div class="trust-row"><span class="trust-dot"></span>2店舗いずれかをご選択</div>
       <div class="trust-row"><span class="trust-dot"></span>体組成測定・カウンセリング込み</div>
     </div>
   </div>
@@ -1267,7 +1351,7 @@ footer {
       <div class="fstep-q">ご連絡先を<br>入力してください</div>
       <div class="ffield"><label>お名前</label><input type="text" placeholder="山田 花子"></div>
       <div class="ffield"><label>電話番号</label><input type="tel" placeholder="090 · 0000 · 0000"></div>
-      <div class="ffield"><label>希望店舗</label><input type="text" placeholder="志木店 / 坂戸店 / 伊勢崎店"></div>
+      <div class="ffield"><label>希望店舗</label><input type="text" placeholder="若葉店 / 伊勢崎店"></div>
       <div class="fnote">送信後、24時間以内にご連絡します。強引な勧誘は一切ありません。</div>
       <div class="fnav">
         <button class="fback" onclick="fBack(3)">戻る</button>
@@ -1289,47 +1373,50 @@ footer {
     <div class="eyebrow fade-up">Pricing</div>
     <h2 class="sec-title fade-up">シンプルな<i>料金</i></h2>
   </div>
+  <p class="pricing-note fade-up">追加料金なしで<strong>2人まで</strong>通えます。夫婦・親子・カップル・友人と一緒に、コスパよく続けられます。</p>
   <div class="pricing-grid">
     <div class="price-col fade-up">
-      <div class="price-name">Starter</div>
-      <div class="price-desc">週1回からはじめる。まず動く習慣をつくりたい方へ。</div>
-      <div class="price-amount">¥28,000</div>
-      <div class="price-per">/ 月（月4回）</div>
+      <div class="price-name">LIGHT</div>
+      <div class="price-desc">まず始めてみる。月4回でトレーニング習慣をつくりたい方へ。</div>
+      <div class="price-amount">¥27,000</div>
+      <div class="price-per">/ 月（月4回）<span class="price-tax">税込 ¥29,700</span></div>
       <ul class="price-items">
         <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 4回</li>
         <li class="price-item"><span class="pi-dot"></span>体組成測定</li>
         <li class="price-item"><span class="pi-dot"></span>食事アドバイス</li>
-        <li class="price-item"><span class="pi-dot"></span>LINEサポート</li>
+        <li class="price-item"><span class="pi-dot"></span>2人まで同時利用可</li>
       </ul>
+      <div class="price-per-session">1回あたり ¥6,750（税込 ¥7,425）</div>
       <button class="price-btn" onclick="go('booking')">体験を予約する</button>
     </div>
     <div class="price-col featured fade-up d1">
-      <div class="price-badge">Most Selected</div>
-      <div class="price-name">Standard</div>
-      <div class="price-desc">最も多くの方に選ばれているプラン。週2回で着実に変わる。</div>
-      <div class="price-amount">¥48,000</div>
-      <div class="price-per">/ 月（月8回）</div>
+      <div class="price-badge">おすすめ</div>
+      <div class="price-name">美BODY</div>
+      <div class="price-desc">最も選ばれているプラン。週2回で着実に美しく変わる。</div>
+      <div class="price-amount">¥50,000</div>
+      <div class="price-per">/ 月（月8回）<span class="price-tax">税込 ¥55,000</span></div>
       <ul class="price-items">
         <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 8回</li>
         <li class="price-item"><span class="pi-dot"></span>体組成測定・姿勢分析</li>
         <li class="price-item"><span class="pi-dot"></span>食事管理サポート</li>
-        <li class="price-item"><span class="pi-dot"></span>LINEサポート（24h対応）</li>
-        <li class="price-item"><span class="pi-dot"></span>自主トレーニング動画</li>
+        <li class="price-item"><span class="pi-dot"></span>LINEサポート</li>
+        <li class="price-item"><span class="pi-dot"></span>2人まで同時利用可</li>
       </ul>
+      <div class="price-per-session">1回あたり ¥6,250（税込 ¥6,875）</div>
       <button class="price-btn" onclick="go('booking')">体験を予約する</button>
     </div>
     <div class="price-col fade-up d2">
-      <div class="price-name">Intensive</div>
-      <div class="price-desc">週3回の集中設計。短期間で大きく変わりたい方へ。</div>
-      <div class="price-amount">¥78,000</div>
-      <div class="price-per">/ 月（月12回）</div>
+      <div class="price-name">短期集中</div>
+      <div class="price-desc">食事指導込みの回数券制。短期間で大きく変わりたい方へ。</div>
+      <div class="price-amount">¥87,000</div>
+      <div class="price-per">/ 12回分<span class="price-tax">税込 ¥95,700</span></div>
       <ul class="price-items">
-        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 12回</li>
-        <li class="price-item"><span class="pi-dot"></span>全測定・詳細分析</li>
-        <li class="price-item"><span class="pi-dot"></span>食事メニュー設計</li>
-        <li class="price-item"><span class="pi-dot"></span>専任トレーナー制</li>
-        <li class="price-item"><span class="pi-dot"></span>ホームワークプログラム</li>
+        <li class="price-item"><span class="pi-dot"></span>マンツーマン 60分 × 12回（回数券）</li>
+        <li class="price-item"><span class="pi-dot"></span>食事指導込み</li>
+        <li class="price-item"><span class="pi-dot"></span>体組成測定・詳細分析</li>
+        <li class="price-item"><span class="pi-dot"></span>2人まで同時利用可</li>
       </ul>
+      <div class="price-per-session">1回あたり ¥7,250（税込 ¥7,975）</div>
       <button class="price-btn" onclick="go('booking')">体験を予約する</button>
     </div>
   </div>
